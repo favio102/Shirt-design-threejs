@@ -7,7 +7,7 @@ import state from "../store";
 
 const Shirt = () => {
   const snap = useSnapshot(state);
-  const { nodes, materials } = useGLTF("/public/shirt_baked.glb");
+  const { nodes, materials } = useGLTF("/shirt_baked.glb");
   const logoTexture = useTexture(snap.logoDecal);
   const fullTexture = useTexture(snap.fullDecal);
 
@@ -40,7 +40,7 @@ const Shirt = () => {
             rotation={[0, 0, 0]}
             scale={0.15}
             map={logoTexture}
-            map-anisotropy={16}
+            mapAnisotropy={16}
             depthTest={false}
             depthWrite={true}
           />
