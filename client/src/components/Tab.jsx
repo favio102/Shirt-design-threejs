@@ -4,6 +4,7 @@ import state from "../store";
 
 const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }) => {
   const snap = useSnapshot(state);
+
   const activeStyles =
     isFilterTab && isActiveTab
       ? { backgroundColor: snap.color, opacity: 0.5 }
@@ -14,7 +15,7 @@ const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }) => {
     <div
       key={tab.name}
       className={`tab-btn ${
-        isFilterTab ? "rounded-full glassmorhism" : "rounded-4"
+        isFilterTab ? "rounded-full glassmorphism" : "rounded-4"
       }`}
       onClick={handleClick}
       style={activeStyles}

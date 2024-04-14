@@ -30,11 +30,11 @@ const Customizer = () => {
   // Show tab content depending on the activeTab
   const generateTabContent = () => {
     switch (activeEditorTab) {
-      case "color picker":
+      case "colorpicker":
         return <ColorPicker />;
-      case "File Picker":
+      case "filepicker":
         return <FilePicker file={file} setFile={setFile} readFile={readFile} />;
-      case "AI Picker":
+      case "aipicker":
         return (
           <AIPicker
             prompt={prompt}
@@ -52,11 +52,23 @@ const Customizer = () => {
     if (!prompt) return alert("Please enter a prompt");
 
     try {
+      setGeneratingImg(true);
+      const response = await fetch("http://localhost:8080/api/v1/dalle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+      const data = await response.json();
+      handleDecals(type, `data:image/png;base64,${data.photo}`);
     } catch (error) {
       alert(error);
     } finally {
       setGeneratingImg(false);
-      setActiveEditorTab('');
+      setActiveEditorTab("");
     }
   };
 
@@ -76,9 +88,11 @@ const Customizer = () => {
         break;
       case "stylishShirt":
         state.isFullTexture = !activeEditorTab[tabName];
+        break;
       default:
         state.isLogoTexture = true;
         state.isFullTexture = false;
+        break;
     }
 
     setActiveFilterTab((prevState) => {
