@@ -6,10 +6,10 @@ const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }) => {
     <div className="aipicker-container">
       <textarea
         placeholder="Ask AI..."
-        value={prompt}
-        className="aipicker-textarea"
         rows={5}
+        value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
+        className="aipicker-textarea"
       />
       <div className="flex flex-wrap gap-3">
         {generatingImg ? (

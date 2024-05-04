@@ -11,7 +11,6 @@ const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }) => {
       : { backgroundColor: "transparent", opacity: 1 };
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       key={tab.name}
       className={`tab-btn ${
