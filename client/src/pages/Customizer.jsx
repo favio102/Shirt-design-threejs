@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import config from "../config/config";
 import state from "../store";
 import { download } from "../assets";
 import { downloadCanvasToImage, reader } from "../config/helpers";
@@ -88,9 +87,13 @@ const Customizer = () => {
       case "stylishShirt":
         state.isFullTexture = !activeFilterTab[tabName];
         break;
+      case 'download':
+        state.isDownload = !activeFilterTab[tabName];
+      break;
       default:
         state.isLogoTexture = true;
         state.isFullTexture = false;
+        state.isDownload = true;
         break;
     }
 
@@ -121,19 +124,21 @@ const Customizer = () => {
             {...slideAnimation("left")}
           >
             <div className="flex items-center min-h-screen ms-3">
-              <div className="editortabs-container tabs bg-sky-700 opacity-60">
+              <div className="editortabs-container tabs bg-sky-300">
                 {EditorTabs.map((tab) => (
-                  <Tab
-                    key={tab.name}
-                    tab={tab}
-                    handleClick={() => {
-                      if (activeEditorTab === tab.name) {
-                        setActiveEditorTab("");
-                      } else {
-                        setActiveEditorTab(tab.name);
-                      }
-                    }}
-                  />
+                  <div className="rounded-lg hover:bg-sky-200">
+                    <Tab
+                      key={tab.name}
+                      tab={tab}
+                      handleClick={() => {
+                        if (activeEditorTab === tab.name) {
+                          setActiveEditorTab("");
+                        } else {
+                          setActiveEditorTab(tab.name);
+                        }
+                      }}
+                    />
+                  </div>
                 ))}
                 {generateTabContent()}
               </div>

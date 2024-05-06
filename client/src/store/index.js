@@ -5,6 +5,7 @@ const state = proxy({
   color: "#EFBD48",
   isLogoTexture: true,
   isFullTexture: false,
+  isDownload: false,
   logoDecal: "./lion.png",
   fullDecal: "./lion.png",
 });
