@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import state from "../store";
-import { download } from "../assets";
 import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
@@ -23,6 +22,7 @@ const Customizer = () => {
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
     stylishShirt: false,
+    download: false,
   });
 
   // show tab content depending on the activeTab
@@ -87,13 +87,13 @@ const Customizer = () => {
       case "stylishShirt":
         state.isFullTexture = !activeFilterTab[tabName];
         break;
-      case 'download':
+      case "download":
         state.isDownload = !activeFilterTab[tabName];
-      break;
+        break;
       default:
         state.isLogoTexture = true;
         state.isFullTexture = false;
-        state.isDownload = true;
+        state.isDownload = false;
         break;
     }
 
@@ -167,16 +167,13 @@ const Customizer = () => {
                 tab={tab}
                 isFilterTab
                 isActiveTab={activeFilterTab[tab.name]}
-                handleClick={() => handleActiveFilterTab(tab.name)}
+                handleClick={() => {
+                  tab.name === "download"
+                    ? downloadCanvasToImage()
+                    : handleActiveFilterTab(tab.name);
+                }}
               />
             ))}
-            <button className="download-btn" onClick={downloadCanvasToImage}>
-              <img
-                src={download}
-                alt="download_image"
-                className="w-3/5 h-3/5 object-contain"
-              />
-            </button>
           </motion.div>
         </>
       )}
