@@ -42,9 +42,11 @@ A modern, interactive web application that allows users to customize t-shirt des
 - **Runtime**: Node.js
 - **Framework**: Express ^4.19.2
 - **AI Integration**: OpenAI API ^4.33.1
+- **Cloud Services**: Cloudinary ^2.1.0
+- **Database**: Mongoose ^8.3.1
 - **Environment Management**: dotenv ^16.4.5
 - **CORS**: cors ^2.8.5
-- **Development**: nodemon ^3.1.0
+- **Auto-restart**: nodemon ^3.1.0
 
 ## 📁 Project Structure
 
