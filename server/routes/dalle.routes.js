@@ -19,16 +19,21 @@ router.route("/").post(async (req, res) => {
     const { prompt } = req.body;
 
     const response = await openai.images.generate({
+      model: "gpt-image-1",
       prompt: prompt,
       n: 1,
       size: "1024x1024",
-      response_format: "b64_json",
     });
     const image = response.data[0].b64_json;
     res.status(200).json({ photo: image });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    console.error(error);
+    const status = error?.status ?? 500;
+    res.status(status).json({
+      message: error?.message ?? "Something went wrong",
+      code: error?.code,
+      type: error?.type,
+    });
   }
 });
 
