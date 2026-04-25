@@ -5,6 +5,7 @@ import state from "../store";
 import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
+import config from "../config/config";
 import {
   CustomButton,
   AIPicker,
@@ -51,7 +52,7 @@ const Customizer = () => {
 
     try {
       setGeneratingImg(true);
-      const response = await fetch("http://localhost:8080/api/v1/dalle", {
+      const response = await fetch(config.backendUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
