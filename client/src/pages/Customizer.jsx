@@ -19,6 +19,7 @@ const Customizer = () => {
   const [file, setFile] = useState("");
   const [prompt, setPrompt] = useState("");
   const [generatingImg, setGeneratingImg] = useState(false);
+  const [aiError, setAiError] = useState("");
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
@@ -40,6 +41,7 @@ const Customizer = () => {
             setPrompt={setPrompt}
             generatingImg={generatingImg}
             handleSubmit={handleSubmit}
+            error={aiError}
           />
         );
       default:
@@ -48,7 +50,11 @@ const Customizer = () => {
   };
 
   const handleSubmit = async (type) => {
-    if (!prompt) return alert("Please enter a prompt");
+    setAiError("");
+    if (!prompt) {
+      setAiError("Please enter a prompt");
+      return;
+    }
 
     try {
       setGeneratingImg(true);
@@ -57,17 +63,21 @@ const Customizer = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          prompt,
-        }),
+        body: JSON.stringify({ prompt }),
       });
       const data = await response.json();
+
+      if (!response.ok) {
+        setAiError(data?.message || `Request failed (${response.status})`);
+        return;
+      }
+
       handleDecals(type, `data:image/png;base64,${data.photo}`);
+      setActiveEditorTab("");
     } catch (error) {
-      alert(error);
+      setAiError(error?.message || "Network error — is the server running?");
     } finally {
       setGeneratingImg(false);
-      setActiveEditorTab("");
     }
   };
 
