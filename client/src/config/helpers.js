@@ -40,6 +40,34 @@ export const renderTextToDataURL = ({ text, font = "Arial", color = "#000000" })
   return canvas.toDataURL("image/png");
 };
 
+const PROMPT_HISTORY_KEY = "shirt-designer-prompt-history";
+const MAX_PROMPT_HISTORY = 5;
+
+export const getPromptHistory = () => {
+  try {
+    const raw = localStorage.getItem(PROMPT_HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const addPromptHistory = (prompt) => {
+  const trimmed = prompt.trim();
+  if (!trimmed) return getPromptHistory();
+  const current = getPromptHistory();
+  const next = [trimmed, ...current.filter((p) => p !== trimmed)].slice(
+    0,
+    MAX_PROMPT_HISTORY
+  );
+  try {
+    localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(next));
+  } catch {
+    // Quota exceeded or storage disabled — fail silently.
+  }
+  return next;
+};
+
 export const getContrastingColor = (color) => {
   // Remove the '#' character if it exists
   const hex = color.replace("#", "");

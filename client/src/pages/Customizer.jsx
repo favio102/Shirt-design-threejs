@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import state, { resetState } from "../store";
-import { downloadCanvasToImage, reader, renderTextToDataURL } from "../config/helpers";
-import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
+import {
+  downloadCanvasToImage,
+  reader,
+  renderTextToDataURL,
+  getPromptHistory,
+  addPromptHistory,
+} from "../config/helpers";
+import { EditorTabs, FilterTabs, DecalTypes, AIStyles } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
 import config from "../config/config";
 import {
@@ -21,6 +27,9 @@ const Customizer = () => {
   const [prompt, setPrompt] = useState("");
   const [generatingImg, setGeneratingImg] = useState(false);
   const [aiError, setAiError] = useState("");
+  const [aiStyle, setAiStyle] = useState("");
+  const [promptHistory, setPromptHistory] = useState(() => getPromptHistory());
+  const [lastAiSubmission, setLastAiSubmission] = useState(null);
   const [textOptions, setTextOptions] = useState({
     text: "",
     font: "Arial",
@@ -48,6 +57,9 @@ const Customizer = () => {
             generatingImg={generatingImg}
             handleSubmit={handleSubmit}
             error={aiError}
+            style={aiStyle}
+            setStyle={setAiStyle}
+            history={promptHistory}
           />
         );
       case "textpicker":
@@ -70,21 +82,26 @@ const Customizer = () => {
     setActiveEditorTab("");
   };
 
-  const handleSubmit = async (type) => {
+  const handleSubmit = async (type, override) => {
     setAiError("");
-    if (!prompt) {
+    const submitPrompt = override?.prompt ?? prompt;
+    const submitStyle = override?.style ?? aiStyle;
+
+    if (!submitPrompt) {
       setAiError("Please enter a prompt");
       return;
     }
 
     try {
       setGeneratingImg(true);
+      const modifier = AIStyles.find((s) => s.key === submitStyle)?.modifier;
+      const fullPrompt = modifier ? `${submitPrompt}, ${modifier}` : submitPrompt;
       const response = await fetch(config.backendUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: fullPrompt }),
       });
       const data = await response.json();
 
@@ -94,7 +111,9 @@ const Customizer = () => {
       }
 
       handleDecals(type, `data:image/png;base64,${data.photo}`);
-      setActiveEditorTab("");
+      setPromptHistory(addPromptHistory(submitPrompt));
+      setLastAiSubmission({ prompt: submitPrompt, style: submitStyle, type });
+      if (!override) setActiveEditorTab("");
     } catch (error) {
       setAiError(error?.message || "Network error — is the server running?");
     } finally {
@@ -155,9 +174,11 @@ const Customizer = () => {
     });
     setActiveEditorTab("");
     setAiError("");
+    setAiStyle("");
     setPrompt("");
     setFile("");
     setTextOptions({ text: "", font: "Arial", color: "#000000" });
+    setLastAiSubmission(null);
   };
 
   return (
@@ -195,6 +216,17 @@ const Customizer = () => {
             className="absolute z-10 top-5 right-5 flex gap-2"
             {...fadeAnimation}
           >
+            {lastAiSubmission && (
+              <CustomButton
+                type="outline"
+                title={generatingImg ? "Generating..." : "Try Again"}
+                handleClick={() =>
+                  !generatingImg &&
+                  handleSubmit(lastAiSubmission.type, lastAiSubmission)
+                }
+                customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+              />
+            )}
             <CustomButton
               type="outline"
               title="Reset"
