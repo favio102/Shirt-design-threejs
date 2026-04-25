@@ -10,6 +10,9 @@ const HIT_RADIUS = 0.2;
 
 const Shirt = () => {
   const snap = useSnapshot(state);
+  // TODO(#7): support multiple garment types — read from snap.garment, swap GLB
+  // path + mesh name (e.g. "T_Shirt_male" → "Hoodie_male"). Needs hoodie/tank/
+  // polo GLBs in /public. See README "Roadmap".
   const { nodes, materials } = useGLTF("/shirt_baked.glb", true);
   const fullTexture = useTexture(snap.fullDecal);
   const logoTextures = useTexture(snap.logos.map((l) => l.map));
