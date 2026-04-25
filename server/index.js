@@ -15,4 +15,5 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello from DALLE" });
 });
 
-app.listen(8080, () => console.log("server has started on port 80-80"));
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`server has started on port ${port}`));
