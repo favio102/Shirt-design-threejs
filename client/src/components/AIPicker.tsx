@@ -11,6 +11,7 @@ const AIPicker = ({
   style,
   setStyle,
   history,
+  progress,
 }) => {
   const showHistory = !prompt && history && history.length > 0;
   return (
@@ -61,11 +62,15 @@ const AIPicker = ({
       )}
       <div className="flex flex-wrap gap-3">
         {generatingImg ? (
-          <CustomButton
-            type="outline"
-            title="Asking AI.."
-            customStyles="text-xs"
-          />
+          <div className="flex-1 flex flex-col gap-1">
+            <p className="text-xs text-gray-700">Generating {progress}%</p>
+            <div className="w-full h-1.5 bg-gray-200 rounded overflow-hidden">
+              <div
+                className="h-full bg-gray-800 transition-all duration-200"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
         ) : (
           <>
             <CustomButton

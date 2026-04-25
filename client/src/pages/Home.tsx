@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state from "../store";
+import state, { enterCustomizer } from "../store";
 import { CustomButton } from "../components";
 import {
   headContainerAnimation,
@@ -40,7 +40,7 @@ const Home = () => {
               <CustomButton
                 type="filled"
                 title="Customize it"
-                handleClick={() => (state.intro = false)}
+                handleClick={enterCustomizer}
                 customStyles="w-fit px-4 py-2.5 font-bold text-sm"
               />
             </motion.div>

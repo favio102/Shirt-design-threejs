@@ -43,6 +43,13 @@ const migrate = (data) => {
   }
   delete data.logoDecal;
   delete data.logoPosition;
+
+  // Drop the seed default lion if it's sitting alongside custom logos —
+  // happens with state saved before addLogo learned to dedupe.
+  if (Array.isArray(data.logos) && data.logos.length > 1) {
+    data.logos = data.logos.filter((l) => l.id !== "default");
+  }
+
   return data;
 };
 
@@ -55,12 +62,24 @@ const loadPersisted = () => {
   }
 };
 
-const persisted = loadPersisted();
+// Hold the persisted state aside so the home screen renders the default
+// preview. The user's saved design is applied only when they click
+// "Customize it" via enterCustomizer().
+let pendingPersisted = loadPersisted();
 const state = proxy({
   ...defaultState,
-  ...(persisted || {}),
   intro: true,
 });
+
+export const enterCustomizer = () => {
+  if (!state.intro) return;
+  if (pendingPersisted) {
+    Object.assign(state, { ...pendingPersisted, intro: false });
+    pendingPersisted = null;
+  } else {
+    state.intro = false;
+  }
+};
 
 subscribe(state, () => {
   if (state.isDragging) return;
@@ -84,6 +103,10 @@ const newLogoId = () =>
   `logo-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
 export const addLogo = (map, partial = {}) => {
+  // Drop the seed default lion the first time the user adds a custom logo.
+  if (state.logos.length === 1 && state.logos[0].id === "default") {
+    state.logos.splice(0, 1);
+  }
   const id = newLogoId();
   state.logos.push({
     id,
@@ -117,20 +140,24 @@ if (designId) {
   fetch(`${config.designsUrl}/${designId}`)
     .then((r) => (r.ok ? r.json() : Promise.reject(r)))
     .then((d) => {
+      pendingPersisted = null;
       const migrated = migrate({ ...d });
+      // Fall back to defaults for any field the server didn't return — never
+      // assign undefined onto the proxy, that breaks downstream rendering
+      // (e.g. material color damping).
       Object.assign(state, {
-        color: migrated.color,
-        isLogoTexture: migrated.isLogoTexture,
-        isFullTexture: migrated.isFullTexture,
-        logos: migrated.logos || [{ ...DEFAULT_LOGO }],
+        color: migrated.color ?? defaultState.color,
+        isLogoTexture: migrated.isLogoTexture ?? defaultState.isLogoTexture,
+        isFullTexture: migrated.isFullTexture ?? defaultState.isFullTexture,
+        logos: migrated.logos?.length ? migrated.logos : [{ ...DEFAULT_LOGO }],
         activeLogoId:
           migrated.activeLogoId || migrated.logos?.[0]?.id || DEFAULT_LOGO.id,
-        fullDecal: migrated.fullDecal,
+        fullDecal: migrated.fullDecal ?? defaultState.fullDecal,
         intro: false,
       });
-      const url = new URL(window.location);
+      const url = new URL(window.location.href);
       url.searchParams.delete("design");
-      window.history.replaceState({}, "", url);
+      window.history.replaceState({}, "", url.toString());
     })
     .catch((err) => {
       console.warn("Failed to load shared design:", err);

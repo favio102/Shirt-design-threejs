@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state, { resetState, addLogo } from "../store";
+import state, { resetState, addLogo, updateActiveLogo } from "../store";
 import {
   downloadCanvasToImage,
   downloadAllViews,
@@ -32,6 +32,7 @@ const Customizer = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [aiError, setAiError] = useState("");
   const [aiStyle, setAiStyle] = useState("");
+  const [progress, setProgress] = useState(0);
   const [promptHistory, setPromptHistory] = useState(() => getPromptHistory());
   const [lastAiSubmission, setLastAiSubmission] = useState(null);
   const [textOptions, setTextOptions] = useState({
@@ -64,6 +65,7 @@ const Customizer = () => {
             style={aiStyle}
             setStyle={setAiStyle}
             history={promptHistory}
+            progress={progress}
           />
         );
       case "textpicker":
@@ -98,6 +100,31 @@ const Customizer = () => {
       return;
     }
 
+    setProgress(0);
+    const startedAt = Date.now();
+    const expectedMs = type === "logo" ? 7000 : 5000;
+    let currentPct = 0;
+    const tick = setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      currentPct = Math.min(95, Math.round((elapsed / expectedMs) * 95));
+      setProgress(currentPct);
+    }, 100);
+
+    const animateToFull = () =>
+      new Promise<void>((resolve) => {
+        const startPct = currentPct;
+        const startAt = Date.now();
+        const duration = 400;
+        const id = setInterval(() => {
+          const t = Math.min(1, (Date.now() - startAt) / duration);
+          setProgress(Math.round(startPct + (100 - startPct) * t));
+          if (t >= 1) {
+            clearInterval(id);
+            resolve();
+          }
+        }, 16);
+      });
+
     try {
       setGeneratingImg(true);
 
@@ -127,28 +154,32 @@ const Customizer = () => {
         try {
           const { removeBackground } = await bgRemovalPromise;
           const blob = await removeBackground(dataUrl);
-          dataUrl = await blobToDataURL(blob);
+          dataUrl = (await blobToDataURL(blob)) as string;
         } catch (bgErr) {
           console.warn("Background removal failed; using original image.", bgErr);
         }
       }
 
-      handleDecals(type, dataUrl);
+      handleDecals(type, dataUrl, !!override);
       setPromptHistory(addPromptHistory(submitPrompt));
       setLastAiSubmission({ prompt: submitPrompt, style: submitStyle, type });
+      clearInterval(tick);
+      await animateToFull();
       if (!override) setActiveEditorTab("");
     } catch (error) {
       setAiError(error?.message || "Network error — is the server running?");
+      clearInterval(tick);
     } finally {
       setGeneratingImg(false);
+      setTimeout(() => setProgress(0), 400);
     }
   };
 
-  const handleDecals = (type, result) => {
+  const handleDecals = (type, result, replace = false) => {
     if (type === "logo") {
-      addLogo(result);
+      if (replace) updateActiveLogo({ map: result });
+      else addLogo(result);
     } else {
-      // Full-shirt texture is still a single slot.
       state.fullDecal = result;
     }
 
@@ -246,7 +277,9 @@ const Customizer = () => {
             {lastAiSubmission && (
               <CustomButton
                 type="outline"
-                title={generatingImg ? "Generating..." : "Try Again"}
+                title={
+                  generatingImg ? `Generating ${progress}%` : "Try Again"
+                }
                 handleClick={() =>
                   !generatingImg &&
                   handleSubmit(lastAiSubmission.type, lastAiSubmission)

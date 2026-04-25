@@ -2,7 +2,14 @@ import React from "react";
 import { useSnapshot } from "valtio";
 import state from "../store";
 
-const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }) => {
+type Props = {
+  tab: { name: string; icon: string };
+  isFilterTab?: boolean;
+  isActiveTab?: boolean;
+  handleClick?: () => void;
+};
+
+const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
   const snap = useSnapshot(state);
 
   const activeStyles =

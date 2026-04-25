@@ -1,13 +1,16 @@
 import React from "react";
 
-class CanvasErrorBoundary extends React.Component {
-  state = { error: null };
+type Props = { children?: React.ReactNode };
+type State = { error: Error | null };
 
-  static getDerivedStateFromError(error) {
+class CanvasErrorBoundary extends React.Component<Props, State> {
+  state: State = { error: null };
+
+  static getDerivedStateFromError(error: Error): State {
     return { error };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error("Canvas error:", error, info);
   }
 

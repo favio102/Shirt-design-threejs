@@ -4,9 +4,15 @@ import state from "../store";
 import config from "../config/config";
 import CustomButton from "./CustomButton";
 
+type ShareState =
+  | { status: "idle" }
+  | { status: "saving" }
+  | { status: "ready"; url: string }
+  | { status: "error"; error: string };
+
 const ShareButton = () => {
   const snap = useSnapshot(state);
-  const [share, setShare] = useState({ status: "idle" });
+  const [share, setShare] = useState<ShareState>({ status: "idle" });
 
   const handleShare = async () => {
     setShare({ status: "saving" });
@@ -36,7 +42,7 @@ const ShareButton = () => {
     } catch (err) {
       setShare({
         status: "error",
-        error: err?.message || "Network error — is the server running?",
+        error: (err as Error)?.message || "Network error — is the server running?",
       });
     }
   };

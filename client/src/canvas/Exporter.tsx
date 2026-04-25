@@ -60,7 +60,7 @@ const Exporter = () => {
       const tempCam = new THREE.PerspectiveCamera(25, 1, 0.1, 100);
       const dist = 2;
 
-      const views = [
+      const views: { pos: [number, number, number]; offset: [number, number] }[] = [
         { pos: [0, 0, dist], offset: [0, 0] },        // front
         { pos: [dist, 0, 0], offset: [cell, 0] },     // right
         { pos: [-dist, 0, 0], offset: [0, cell] },    // left

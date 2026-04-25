@@ -1,9 +1,14 @@
 import React, { useRef } from "react";
-import { Vector3 } from "three";
+import { Mesh, MeshLambertMaterial, Vector3, Texture } from "three";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { useSnapshot } from "valtio";
-import { useFrame } from "@react-three/fiber";
-import { Decal, useGLTF, useTexture } from "@react-three/drei";
+import { Decal as _Decal, useGLTF, useTexture } from "@react-three/drei";
+
+// Drei's Decal type doesn't expose anisotropy/depthTest/depthWrite as direct
+// props, but R3F forwards them to the underlying material. Keep behavior
+// identical by widening the prop type.
+const Decal = _Decal as any;
 import state from "../store";
 
 const HIT_RADIUS = 0.2;
@@ -13,23 +18,32 @@ const Shirt = () => {
   // TODO(#7): support multiple garment types — read from snap.garment, swap GLB
   // path + mesh name (e.g. "T_Shirt_male" → "Hoodie_male"). Needs hoodie/tank/
   // polo GLBs in /public. See README "Roadmap".
-  const { nodes, materials } = useGLTF("/shirt_baked.glb", true);
-  const fullTexture = useTexture(snap.fullDecal);
-  const logoTextures = useTexture(snap.logos.map((l) => l.map));
+  const { nodes, materials } = useGLTF("/shirt_baked.glb", true) as any;
+  const fullTexture = useTexture(snap.fullDecal) as Texture;
 
-  // useTexture returns a single texture for a single-element array; normalize.
-  const logoTextureList = Array.isArray(logoTextures)
-    ? logoTextures
-    : [logoTextures];
+  // useTexture must always be called with at least one URL — passing an empty
+  // array crashes Drei's loader. When the user removes every logo we feed it a
+  // dummy URL and skip rendering it.
+  const logoUrls =
+    snap.logos.length > 0 ? snap.logos.map((l) => l.map) : ["./lion.png"];
+  const logoTextures = useTexture(logoUrls);
+  const logoTextureList: Texture[] = Array.isArray(logoTextures)
+    ? (logoTextures as Texture[])
+    : [logoTextures as Texture];
 
-  const draggingId = useRef(null);
+  const draggingId = useRef<string | null>(null);
 
-  useFrame((rootState, delta) =>
-    easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
+  useFrame((_rootState, delta) =>
+    easing.dampC(
+      (materials.lambert1 as MeshLambertMaterial).color,
+      snap.color,
+      0.25,
+      delta
+    )
   );
 
-  const findHitLogo = (localPoint) => {
-    let closest = null;
+  const findHitLogo = (localPoint: Vector3) => {
+    let closest: typeof snap.logos[number] | null = null;
     let closestDist = HIT_RADIUS;
     for (const l of snap.logos) {
       const d = localPoint.distanceTo(new Vector3(...l.position));
@@ -41,7 +55,7 @@ const Shirt = () => {
     return closest;
   };
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     if (!snap.isLogoTexture || snap.logos.length === 0) return;
     const local = e.eventObject.worldToLocal(e.point.clone());
     const hit = findHitLogo(local);
@@ -51,11 +65,12 @@ const Shirt = () => {
     draggingId.current = hit.id;
     state.activeLogoId = hit.id;
     state.isDragging = true;
-    e.target.setPointerCapture?.(e.pointerId);
+    (e.target as Element & { setPointerCapture?: (id: number) => void })
+      .setPointerCapture?.(e.pointerId);
     document.body.style.cursor = "grabbing";
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
     if (!draggingId.current) return;
     e.stopPropagation();
     const local = e.eventObject.worldToLocal(e.point.clone());
@@ -63,22 +78,23 @@ const Shirt = () => {
     if (logo) logo.position = [local.x, local.y, local.z];
   };
 
-  const endDrag = (e) => {
+  const endDrag = (e: ThreeEvent<PointerEvent>) => {
     if (!draggingId.current) return;
     draggingId.current = null;
     state.isDragging = false;
-    e.target.releasePointerCapture?.(e.pointerId);
+    (e.target as Element & { releasePointerCapture?: (id: number) => void })
+      .releasePointerCapture?.(e.pointerId);
     document.body.style.cursor = "";
   };
 
-  // Force remount only when decal images change, not on every position tick.
   const decalKey = `${snap.logos.map((l) => l.map).join("|")}::${snap.fullDecal}`;
+  const shirtMesh = nodes.T_Shirt_male as Mesh;
 
   return (
     <group key={decalKey}>
       <mesh
         castShadow
-        geometry={nodes.T_Shirt_male.geometry}
+        geometry={shirtMesh.geometry}
         material={materials.lambert1}
         material-roughness={1}
         dispose={null}

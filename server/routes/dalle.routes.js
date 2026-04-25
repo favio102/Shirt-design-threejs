@@ -1,15 +1,8 @@
 import express from "express";
-import * as dotenv from "dotenv";
-import OpenAI from 'openai';
 import rateLimit from "express-rate-limit";
 import logger from "../utils/logger.js";
 
-dotenv.config();
 const router = express.Router();
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 const aiLimiter = rateLimit({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60 * 1000,
@@ -23,28 +16,37 @@ const aiLimiter = rateLimit({
 });
 
 router.route("/").get((req, res) => {
-  res.status(200).json({ message: "Hello from DALL. E Router" });
+  res.status(200).json({ message: "Hello from image generation router" });
 });
 
 router.route("/").post(aiLimiter, async (req, res) => {
   try {
     const { prompt } = req.body;
+    if (!prompt || typeof prompt !== "string") {
+      return res.status(400).json({ message: "Prompt is required." });
+    }
 
-    const response = await openai.images.generate({
-      model: "gpt-image-1",
-      prompt: prompt,
-      n: 1,
-      size: "1024x1024",
-    });
-    const image = response.data[0].b64_json;
+    const seed = Math.floor(Math.random() * 1_000_000);
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(
+      prompt
+    )}?width=1024&height=1024&nologo=true&model=flux&seed=${seed}`;
+
+    const upstream = await fetch(url);
+    if (!upstream.ok) {
+      return res.status(upstream.status).json({
+        message: `Image service returned ${upstream.status}`,
+        code: "upstream_error",
+      });
+    }
+
+    const buffer = Buffer.from(await upstream.arrayBuffer());
+    const image = buffer.toString("base64");
     res.status(200).json({ photo: image });
   } catch (error) {
-    logger.error({ err: error }, "DALL·E generation failed");
-    const status = error?.status ?? 500;
-    res.status(status).json({
+    logger.error({ err: error }, "image generation failed");
+    res.status(500).json({
       message: error?.message ?? "Something went wrong",
       code: error?.code,
-      type: error?.type,
     });
   }
 });
