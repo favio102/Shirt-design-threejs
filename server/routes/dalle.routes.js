@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import OpenAI from 'openai';
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 const router = express.Router();
@@ -9,12 +10,22 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const aiLimiter = rateLimit({
+  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60 * 1000,
+  max: Number(process.env.RATE_LIMIT_MAX) || 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    message: "Too many image generation requests — please slow down.",
+    code: "rate_limit_exceeded",
+  },
+});
 
 router.route("/").get((req, res) => {
   res.status(200).json({ message: "Hello from DALL. E Router" });
 });
 
-router.route("/").post(async (req, res) => {
+router.route("/").post(aiLimiter, async (req, res) => {
   try {
     const { prompt } = req.body;
 

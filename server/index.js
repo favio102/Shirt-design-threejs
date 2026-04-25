@@ -7,6 +7,11 @@ dotenv.config();
 
 const app = express();
 
+if (process.env.TRUST_PROXY) {
+  const value = process.env.TRUST_PROXY;
+  app.set("trust proxy", isNaN(Number(value)) ? value : Number(value));
+}
+
 const corsOrigin = process.env.CORS_ORIGIN;
 const corsOptions = corsOrigin
   ? { origin: corsOrigin.split(",").map((o) => o.trim()) }
