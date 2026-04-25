@@ -8,6 +8,7 @@ import {
   renderTextToDataURL,
   getPromptHistory,
   addPromptHistory,
+  blobToDataURL,
 } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes, AIStyles } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
@@ -94,6 +95,12 @@ const Customizer = () => {
 
     try {
       setGeneratingImg(true);
+
+      // Pre-load the bg-removal model in parallel with the AI fetch so the
+      // model is ready (or close to it) by the time the image arrives.
+      const bgRemovalPromise =
+        type === "logo" ? import("@imgly/background-removal") : null;
+
       const modifier = AIStyles.find((s) => s.key === submitStyle)?.modifier;
       const fullPrompt = modifier ? `${submitPrompt}, ${modifier}` : submitPrompt;
       const response = await fetch(config.backendUrl, {
@@ -110,7 +117,18 @@ const Customizer = () => {
         return;
       }
 
-      handleDecals(type, `data:image/png;base64,${data.photo}`);
+      let dataUrl = `data:image/png;base64,${data.photo}`;
+      if (bgRemovalPromise) {
+        try {
+          const { removeBackground } = await bgRemovalPromise;
+          const blob = await removeBackground(dataUrl);
+          dataUrl = await blobToDataURL(blob);
+        } catch (bgErr) {
+          console.warn("Background removal failed; using original image.", bgErr);
+        }
+      }
+
+      handleDecals(type, dataUrl);
       setPromptHistory(addPromptHistory(submitPrompt));
       setLastAiSubmission({ prompt: submitPrompt, style: submitStyle, type });
       if (!override) setActiveEditorTab("");

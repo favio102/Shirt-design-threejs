@@ -4,6 +4,7 @@ import { Environment, Center, Loader } from "@react-three/drei";
 import Shirt from "./Shirt";
 import Backdrop from "./Backdrop";
 import CameraRig from "./CameraRig";
+import Exporter from "./Exporter";
 
 const CanvasModel = () => {
   return (
@@ -24,6 +25,7 @@ const CanvasModel = () => {
             </Suspense>
           </Center>
         </CameraRig>
+        <Exporter />
       </Canvas>
       <Loader />
     </>
