@@ -6,6 +6,7 @@ import {
   uploadDataUrl,
   isCloudinaryConfigured,
 } from "../utils/cloudinary.js";
+import logger from "../utils/logger.js";
 
 const router = express.Router();
 
@@ -69,7 +70,7 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({ id: design._id });
   } catch (error) {
-    console.error(error);
+    logger.error({ err: error }, "designs route error");
     res.status(500).json({
       message: error?.message || "Failed to save design.",
       code: error?.code,
@@ -96,7 +97,7 @@ router.get("/:id", async (req, res) => {
       fullDecal: design.fullDecal,
     });
   } catch (error) {
-    console.error(error);
+    logger.error({ err: error }, "designs route error");
     res.status(500).json({
       message: error?.message || "Failed to load design.",
     });

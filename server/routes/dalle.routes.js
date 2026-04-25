@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import OpenAI from 'openai';
 import rateLimit from "express-rate-limit";
+import logger from "../utils/logger.js";
 
 dotenv.config();
 const router = express.Router();
@@ -38,7 +39,7 @@ router.route("/").post(aiLimiter, async (req, res) => {
     const image = response.data[0].b64_json;
     res.status(200).json({ photo: image });
   } catch (error) {
-    console.error(error);
+    logger.error({ err: error }, "DALL·E generation failed");
     const status = error?.status ?? 500;
     res.status(status).json({
       message: error?.message ?? "Something went wrong",

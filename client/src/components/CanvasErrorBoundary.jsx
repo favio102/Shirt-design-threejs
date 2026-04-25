@@ -1,0 +1,43 @@
+import React from "react";
+
+class CanvasErrorBoundary extends React.Component {
+  state = { error: null };
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error("Canvas error:", error, info);
+  }
+
+  handleReload = () => {
+    this.setState({ error: null });
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
+          <div className="bg-white/90 rounded-md shadow-lg p-5 max-w-sm text-center">
+            <h2 className="text-base font-bold mb-2">3D scene crashed</h2>
+            <p className="text-xs text-gray-600 mb-3 break-words">
+              {this.state.error.message || "Unknown error"}
+            </p>
+            <button
+              type="button"
+              onClick={this.handleReload}
+              className="px-3 py-1.5 rounded bg-gray-800 text-white text-xs"
+            >
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default CanvasErrorBoundary;

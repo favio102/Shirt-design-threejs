@@ -44,7 +44,7 @@ html {
 }
 
 .aipicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] h-[220px] rounded-md flex flex-col gap-4;
+  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] rounded-md flex flex-col gap-4;
 }
 
 .aipicker-textarea {
@@ -52,15 +52,15 @@ html {
 }
 
 .filepicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] h-[220px] flex flex-col rounded-md;
+  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] flex flex-col rounded-md;
 }
 
 .textpicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] h-[220px] rounded-md flex flex-col;
+  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] rounded-md flex flex-col;
 }
 
 .decalmanager-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[210px] rounded-md flex flex-col gap-1;
+  @apply absolute left-full ml-3 glassmorphism p-3 w-[210px] max-w-[calc(100vw-5rem)] rounded-md flex flex-col gap-1;
 }
 
 .textpicker-input {

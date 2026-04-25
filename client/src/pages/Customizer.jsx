@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import state, { resetState, addLogo } from "../store";
@@ -220,9 +220,8 @@ const Customizer = () => {
             <div className="flex items-center min-h-screen ms-3">
               <div className="editortabs-container tabs bg-sky-300">
                 {EditorTabs.map((tab) => (
-                  <div className="rounded-lg hover:bg-sky-200">
+                  <div key={tab.name} className="rounded-lg hover:bg-sky-200">
                     <Tab
-                      key={tab.name}
                       tab={tab}
                       handleClick={() => {
                         if (activeEditorTab === tab.name) {
@@ -240,7 +239,7 @@ const Customizer = () => {
           </motion.div>
 
           <motion.div
-            className="absolute z-10 top-5 right-5 flex gap-2"
+            className="absolute z-10 top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[calc(100vw-5rem)]"
             {...fadeAnimation}
           >
             {lastAiSubmission && (
