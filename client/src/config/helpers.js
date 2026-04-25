@@ -17,6 +17,29 @@ export const reader = (file) =>
     fileReader.readAsDataURL(file);
   });
 
+export const renderTextToDataURL = ({ text, font = "Arial", color = "#000000" }) => {
+  const canvas = document.createElement("canvas");
+  const size = 1024;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const family = `"${font}", sans-serif`;
+  let fontSize = 240;
+  ctx.font = `bold ${fontSize}px ${family}`;
+  while (ctx.measureText(text).width > size * 0.9 && fontSize > 24) {
+    fontSize -= 8;
+    ctx.font = `bold ${fontSize}px ${family}`;
+  }
+
+  ctx.fillText(text, size / 2, size / 2);
+  return canvas.toDataURL("image/png");
+};
+
 export const getContrastingColor = (color) => {
   // Remove the '#' character if it exists
   const hex = color.replace("#", "");

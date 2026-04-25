@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import state, { resetState } from "../store";
-import { downloadCanvasToImage, reader } from "../config/helpers";
+import { downloadCanvasToImage, reader, renderTextToDataURL } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
 import config from "../config/config";
@@ -11,6 +11,7 @@ import {
   AIPicker,
   ColorPicker,
   FilePicker,
+  TextPicker,
   Tab,
 } from "../components";
 
@@ -20,6 +21,11 @@ const Customizer = () => {
   const [prompt, setPrompt] = useState("");
   const [generatingImg, setGeneratingImg] = useState(false);
   const [aiError, setAiError] = useState("");
+  const [textOptions, setTextOptions] = useState({
+    text: "",
+    font: "Arial",
+    color: "#000000",
+  });
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
@@ -44,9 +50,24 @@ const Customizer = () => {
             error={aiError}
           />
         );
+      case "textpicker":
+        return (
+          <TextPicker
+            options={textOptions}
+            setOptions={setTextOptions}
+            applyText={applyText}
+          />
+        );
       default:
         return null;
     }
+  };
+
+  const applyText = (type) => {
+    if (!textOptions.text.trim()) return;
+    const dataURL = renderTextToDataURL(textOptions);
+    handleDecals(type, dataURL);
+    setActiveEditorTab("");
   };
 
   const handleSubmit = async (type) => {
@@ -136,6 +157,7 @@ const Customizer = () => {
     setAiError("");
     setPrompt("");
     setFile("");
+    setTextOptions({ text: "", font: "Arial", color: "#000000" });
   };
 
   return (
