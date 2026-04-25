@@ -12,6 +12,9 @@ const textIcon = `data:image/svg+xml;utf8,${encodeURIComponent(textIconSvg)}`;
 const layersIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`;
 const layersIcon = `data:image/svg+xml;utf8,${encodeURIComponent(layersIconSvg)}`;
 
+const gridIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`;
+const gridIcon = `data:image/svg+xml;utf8,${encodeURIComponent(gridIconSvg)}`;
+
 export {
   ai,
   fileIcon,
@@ -21,4 +24,5 @@ export {
   stylishShirt,
   textIcon,
   layersIcon,
+  gridIcon,
 };

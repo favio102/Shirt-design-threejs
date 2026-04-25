@@ -4,6 +4,7 @@ import { useSnapshot } from "valtio";
 import state, { resetState, addLogo } from "../store";
 import {
   downloadCanvasToImage,
+  downloadAllViews,
   reader,
   renderTextToDataURL,
   getPromptHistory,
@@ -279,9 +280,9 @@ const Customizer = () => {
                 isFilterTab
                 isActiveTab={activeFilterTab[tab.name]}
                 handleClick={() => {
-                  tab.name === "download"
-                    ? downloadCanvasToImage()
-                    : handleActiveFilterTab(tab.name);
+                  if (tab.name === "download") downloadCanvasToImage();
+                  else if (tab.name === "mockup") downloadAllViews();
+                  else handleActiveFilterTab(tab.name);
                 }}
               />
             ))}

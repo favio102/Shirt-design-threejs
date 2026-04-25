@@ -33,7 +33,7 @@ const CameraRig = ({ children }) => {
     easing.dampE(group.current.rotation, targetRotation, 0.25, delta);
   });
 
-  return <group ref={group}>{children}</group>;
+  return <group ref={group} name="camera-rig">{children}</group>;
 };
 
 export default CameraRig;

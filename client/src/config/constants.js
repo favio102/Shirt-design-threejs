@@ -7,6 +7,7 @@ import {
   download,
   textIcon,
   layersIcon,
+  gridIcon,
 } from "../assets";
 
 export const EditorTabs = [
@@ -44,6 +45,10 @@ export const FilterTabs = [
   {
     name: "download",
     icon: download
+  },
+  {
+    name: "mockup",
+    icon: gridIcon
   }
 ];
 

@@ -1,4 +1,5 @@
 const exportHandlers = { current: null };
+const exportViewsHandlers = { current: null };
 
 export const registerExportHandler = (fn) => {
   exportHandlers.current = fn;
@@ -7,15 +8,29 @@ export const registerExportHandler = (fn) => {
   };
 };
 
-export const downloadCanvasToImage = () => {
-  const dataURL = exportHandlers.current?.();
+export const registerExportViewsHandler = (fn) => {
+  exportViewsHandlers.current = fn;
+  return () => {
+    if (exportViewsHandlers.current === fn) exportViewsHandlers.current = null;
+  };
+};
+
+const triggerDownload = (dataURL, filename) => {
   if (!dataURL) return;
   const link = document.createElement("a");
   link.href = dataURL;
-  link.download = "shirt-design.png";
+  link.download = filename;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+};
+
+export const downloadCanvasToImage = () => {
+  triggerDownload(exportHandlers.current?.(), "shirt-design.png");
+};
+
+export const downloadAllViews = () => {
+  triggerDownload(exportViewsHandlers.current?.(), "shirt-mockup.png");
 };
 
 export const reader = (file) =>
