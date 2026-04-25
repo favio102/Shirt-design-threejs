@@ -50,4 +50,6 @@ const Shirt = () => {
   );
 };
 
+useGLTF.preload("/shirt_baked.glb");
+
 export default Shirt;
