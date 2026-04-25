@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state from "../store";
+import state, { resetState } from "../store";
 import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
@@ -125,6 +125,19 @@ const Customizer = () => {
     });
   };
 
+  const handleReset = () => {
+    resetState();
+    setActiveFilterTab({
+      logoShirt: true,
+      stylishShirt: false,
+      download: false,
+    });
+    setActiveEditorTab("");
+    setAiError("");
+    setPrompt("");
+    setFile("");
+  };
+
   return (
     <AnimatePresence>
       {!snap.intro && (
@@ -157,9 +170,15 @@ const Customizer = () => {
           </motion.div>
 
           <motion.div
-            className="absolute z-10 top-5 right-5"
+            className="absolute z-10 top-5 right-5 flex gap-2"
             {...fadeAnimation}
           >
+            <CustomButton
+              type="outline"
+              title="Reset"
+              handleClick={handleReset}
+              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+            />
             <CustomButton
               type="filled"
               title="Go Back"

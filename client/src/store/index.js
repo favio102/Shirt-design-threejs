@@ -38,4 +38,9 @@ subscribe(state, () => {
   }
 });
 
+export const resetState = () => {
+  const { intro: _intro, ...rest } = defaultState;
+  Object.assign(state, rest);
+};
+
 export default state;
