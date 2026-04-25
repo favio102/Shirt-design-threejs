@@ -1,4 +1,13 @@
-import { swatch, fileIcon, ai, logoShirt, stylishShirt, download, textIcon } from "../assets";
+import {
+  swatch,
+  fileIcon,
+  ai,
+  logoShirt,
+  stylishShirt,
+  download,
+  textIcon,
+  layersIcon,
+} from "../assets";
 
 export const EditorTabs = [
   {
@@ -16,6 +25,10 @@ export const EditorTabs = [
   {
     name: "textpicker",
     icon: textIcon,
+  },
+  {
+    name: "decalmanager",
+    icon: layersIcon,
   },
 ];
 

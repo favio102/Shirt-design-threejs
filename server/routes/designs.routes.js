@@ -9,18 +9,39 @@ import {
 
 const router = express.Router();
 
+// Accept both the new (logos: []) shape and the legacy
+// (logoDecal, logoPosition) single-logo shape, and normalize to logos[].
+const normalizeLogos = (body) => {
+  if (Array.isArray(body.logos)) return body.logos;
+  if (body.logoDecal) {
+    return [
+      {
+        id: "default",
+        map: body.logoDecal,
+        position: body.logoPosition || [0, 0.04, 0.15],
+        rotation: [0, 0, 0],
+        scale: 0.15,
+      },
+    ];
+  }
+  return [];
+};
+
 router.post("/", async (req, res) => {
   try {
-    const { color, isLogoTexture, isFullTexture, logoDecal, fullDecal } =
-      req.body;
+    const { color, isLogoTexture, isFullTexture, fullDecal } = req.body;
+    const logos = normalizeLogos(req.body);
 
-    if (!color || !logoDecal || !fullDecal) {
+    if (!color || !fullDecal) {
       return res
         .status(400)
-        .json({ message: "Missing required fields: color, logoDecal, fullDecal." });
+        .json({ message: "Missing required fields: color, fullDecal." });
     }
 
-    if (!isCloudinaryConfigured() && (isDataUrl(logoDecal) || isDataUrl(fullDecal))) {
+    const anyLogoIsDataUrl = logos.some((l) => isDataUrl(l.map));
+    const fullIsDataUrl = isDataUrl(fullDecal);
+
+    if (!isCloudinaryConfigured() && (anyLogoIsDataUrl || fullIsDataUrl)) {
       return res.status(503).json({
         message:
           "Cloudinary credentials are not configured; cannot upload custom decal images.",
@@ -28,8 +49,13 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const [logoUrl, fullUrl] = await Promise.all([
-      isDataUrl(logoDecal) ? uploadDataUrl(logoDecal) : logoDecal,
+    const [uploadedLogos, fullUrl] = await Promise.all([
+      Promise.all(
+        logos.map(async (l) => ({
+          ...l,
+          map: isDataUrl(l.map) ? await uploadDataUrl(l.map) : l.map,
+        }))
+      ),
       isDataUrl(fullDecal) ? uploadDataUrl(fullDecal) : fullDecal,
     ]);
 
@@ -37,7 +63,7 @@ router.post("/", async (req, res) => {
       color,
       isLogoTexture: !!isLogoTexture,
       isFullTexture: !!isFullTexture,
-      logoDecal: logoUrl,
+      logos: uploadedLogos,
       fullDecal: fullUrl,
     });
 
@@ -66,7 +92,7 @@ router.get("/:id", async (req, res) => {
       color: design.color,
       isLogoTexture: design.isLogoTexture,
       isFullTexture: design.isFullTexture,
-      logoDecal: design.logoDecal,
+      logos: design.logos,
       fullDecal: design.fullDecal,
     });
   } catch (error) {

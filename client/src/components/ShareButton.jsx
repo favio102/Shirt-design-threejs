@@ -18,7 +18,7 @@ const ShareButton = () => {
           color: snap.color,
           isLogoTexture: snap.isLogoTexture,
           isFullTexture: snap.isFullTexture,
-          logoDecal: snap.logoDecal,
+          logos: snap.logos,
           fullDecal: snap.fullDecal,
         }),
       });

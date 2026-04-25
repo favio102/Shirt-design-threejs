@@ -11,46 +11,65 @@ const HIT_RADIUS = 0.2;
 const Shirt = () => {
   const snap = useSnapshot(state);
   const { nodes, materials } = useGLTF("/shirt_baked.glb", true);
-  const logoTexture = useTexture(snap.logoDecal);
   const fullTexture = useTexture(snap.fullDecal);
+  const logoTextures = useTexture(snap.logos.map((l) => l.map));
 
-  const dragging = useRef(false);
+  // useTexture returns a single texture for a single-element array; normalize.
+  const logoTextureList = Array.isArray(logoTextures)
+    ? logoTextures
+    : [logoTextures];
+
+  const draggingId = useRef(null);
 
   useFrame((rootState, delta) =>
     easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
   );
 
+  const findHitLogo = (localPoint) => {
+    let closest = null;
+    let closestDist = HIT_RADIUS;
+    for (const l of snap.logos) {
+      const d = localPoint.distanceTo(new Vector3(...l.position));
+      if (d < closestDist) {
+        closestDist = d;
+        closest = l;
+      }
+    }
+    return closest;
+  };
+
   const handlePointerDown = (e) => {
-    if (!snap.isLogoTexture) return;
+    if (!snap.isLogoTexture || snap.logos.length === 0) return;
     const local = e.eventObject.worldToLocal(e.point.clone());
-    const logoPos = new Vector3(...snap.logoPosition);
-    if (local.distanceTo(logoPos) > HIT_RADIUS) return;
+    const hit = findHitLogo(local);
+    if (!hit) return;
 
     e.stopPropagation();
-    dragging.current = true;
+    draggingId.current = hit.id;
+    state.activeLogoId = hit.id;
     state.isDragging = true;
     e.target.setPointerCapture?.(e.pointerId);
     document.body.style.cursor = "grabbing";
   };
 
   const handlePointerMove = (e) => {
-    if (!dragging.current) return;
+    if (!draggingId.current) return;
     e.stopPropagation();
     const local = e.eventObject.worldToLocal(e.point.clone());
-    state.logoPosition = [local.x, local.y, local.z];
+    const logo = state.logos.find((l) => l.id === draggingId.current);
+    if (logo) logo.position = [local.x, local.y, local.z];
   };
 
   const endDrag = (e) => {
-    if (!dragging.current) return;
-    dragging.current = false;
+    if (!draggingId.current) return;
+    draggingId.current = null;
     state.isDragging = false;
     e.target.releasePointerCapture?.(e.pointerId);
     document.body.style.cursor = "";
   };
 
-  // Force remount only when decal images change — position changes must NOT
-  // remount the group (would kill the drag mid-frame).
-  const decalKey = `${snap.logoDecal}|${snap.fullDecal}`;
+  // Force remount only when decal images change, not on every position tick.
+  const decalKey = `${snap.logos.map((l) => l.map).join("|")}::${snap.fullDecal}`;
 
   return (
     <group key={decalKey}>
@@ -73,17 +92,19 @@ const Shirt = () => {
             map={fullTexture}
           />
         )}
-        {snap.isLogoTexture && (
-          <Decal
-            position={snap.logoPosition}
-            rotation={[0, 0, 0]}
-            scale={0.15}
-            map={logoTexture}
-            anisotropy={16}
-            depthTest={false}
-            depthWrite={true}
-          />
-        )}
+        {snap.isLogoTexture &&
+          snap.logos.map((logo, i) => (
+            <Decal
+              key={logo.id}
+              position={logo.position}
+              rotation={logo.rotation}
+              scale={logo.scale}
+              map={logoTextureList[i]}
+              anisotropy={16}
+              depthTest={false}
+              depthWrite={true}
+            />
+          ))}
       </mesh>
     </group>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state, { resetState } from "../store";
+import state, { resetState, addLogo } from "../store";
 import {
   downloadCanvasToImage,
   reader,
@@ -20,6 +20,7 @@ import {
   FilePicker,
   TextPicker,
   ShareButton,
+  DecalManager,
   Tab,
 } from "../components";
 
@@ -72,6 +73,8 @@ const Customizer = () => {
             applyText={applyText}
           />
         );
+      case "decalmanager":
+        return <DecalManager />;
       default:
         return null;
     }
@@ -141,9 +144,14 @@ const Customizer = () => {
   };
 
   const handleDecals = (type, result) => {
-    const decalType = DecalTypes[type];
-    state[decalType.stateProperty] = result;
+    if (type === "logo") {
+      addLogo(result);
+    } else {
+      // Full-shirt texture is still a single slot.
+      state.fullDecal = result;
+    }
 
+    const decalType = DecalTypes[type];
     if (!activeFilterTab[decalType.filterTab]) {
       handleActiveFilterTab(decalType.filterTab);
     }

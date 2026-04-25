@@ -4,6 +4,7 @@ import ColorPicker from "./ColorPicker";
 import FilePicker from "./FilePicker";
 import TextPicker from "./TextPicker";
 import ShareButton from "./ShareButton";
+import DecalManager from "./DecalManager";
 import Tab from "./Tab";
 
 export {
@@ -13,5 +14,6 @@ export {
   FilePicker,
   TextPicker,
   ShareButton,
+  DecalManager,
   Tab,
 };
