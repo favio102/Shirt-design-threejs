@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import state, { resetState, addLogo, updateActiveLogo } from "../store";
@@ -41,6 +41,12 @@ const Customizer = () => {
     color: "#000000",
   });
   const [activeEditorTab, setActiveEditorTab] = useState("");
+
+  useEffect(() => {
+    if (!aiError) return;
+    const t = setTimeout(() => setAiError(""), 5000);
+    return () => clearTimeout(t);
+  }, [aiError]);
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
     stylishShirt: false,
@@ -167,7 +173,9 @@ const Customizer = () => {
       await animateToFull();
       if (!override) setActiveEditorTab("");
     } catch (error) {
-      setAiError(error?.message || "Network error — is the server running?");
+      setAiError(
+        "AI service is unavailable right now. Please try again later."
+      );
       clearInterval(tick);
     } finally {
       setGeneratingImg(false);
@@ -244,6 +252,17 @@ const Customizer = () => {
     <AnimatePresence>
       {!snap.intro && (
         <>
+          {aiError && activeEditorTab !== "aipicker" && (
+            <motion.div
+              key="ai-error-toast"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              className="fixed top-5 left-1/2 -translate-x-1/2 z-30 bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 rounded-md shadow max-w-[80vw] text-center"
+            >
+              {aiError}
+            </motion.div>
+          )}
           <motion.div
             className="absolute top-0 left-0 z-10"
             key="custom"
