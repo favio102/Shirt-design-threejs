@@ -8,7 +8,7 @@ const CameraRig = ({ children }) => {
   const group = useRef();
   const snap = useSnapshot(state);
 
-  useFrame((state, delta) => {
+  useFrame((rootState, delta) => {
     const isBreakpoint = window.innerWidth <= 1260;
     const isMobile = window.innerWidth <= 600;
 
@@ -23,15 +23,14 @@ const CameraRig = ({ children }) => {
     }
 
     // set model camera position
-    easing.damp3(state.camera.position, targetPosition, 0.25, delta);
+    easing.damp3(rootState.camera.position, targetPosition, 0.25, delta);
 
-    // set the model rotation smoothly
-    easing.dampE(
-      group.current.rotation,
-      [state.pointer.y / 10, -state.pointer.x / 5, 0],
-      0.25,
-      delta
-    );
+    // hold rotation steady while the user is dragging a decal
+    const targetRotation = snap.isDragging
+      ? [group.current.rotation.x, group.current.rotation.y, 0]
+      : [rootState.pointer.y / 10, -rootState.pointer.x / 5, 0];
+
+    easing.dampE(group.current.rotation, targetRotation, 0.25, delta);
   });
 
   return <group ref={group}>{children}</group>;

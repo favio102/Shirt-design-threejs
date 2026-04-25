@@ -11,6 +11,8 @@ const defaultState = {
   isDownload: false,
   logoDecal: "./lion.png",
   fullDecal: "./lion.png",
+  logoPosition: [0, 0.04, 0.15],
+  isDragging: false,
 };
 
 const loadPersisted = () => {
@@ -31,8 +33,9 @@ const state = proxy({
 });
 
 subscribe(state, () => {
+  if (state.isDragging) return;
   try {
-    const { intro: _intro, ...rest } = state;
+    const { intro: _intro, isDragging: _isDragging, ...rest } = state;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
   } catch {
     // Quota exceeded or storage disabled — fail silently.
