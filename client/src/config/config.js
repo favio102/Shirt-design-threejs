@@ -3,9 +3,14 @@ const fallbackByMode = {
   production: "https://devswag.onrender.com/api/v1/dalle",
 };
 
-const backendUrl =
+const dalleUrl =
   import.meta.env.VITE_BACKEND_URL ||
   fallbackByMode[import.meta.env.MODE] ||
   fallbackByMode.development;
 
-export default { backendUrl };
+const apiBase = dalleUrl.replace(/\/dalle\/?$/, "");
+
+export default {
+  backendUrl: dalleUrl,
+  designsUrl: `${apiBase}/designs`,
+};

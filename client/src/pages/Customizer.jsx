@@ -19,6 +19,7 @@ import {
   ColorPicker,
   FilePicker,
   TextPicker,
+  ShareButton,
   Tab,
 } from "../components";
 
@@ -245,6 +246,7 @@ const Customizer = () => {
                 customStyles="w-fit px-4 py-2.5 font-bold text-sm"
               />
             )}
+            <ShareButton />
             <CustomButton
               type="outline"
               title="Reset"
