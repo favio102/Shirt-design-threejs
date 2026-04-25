@@ -6,6 +6,7 @@ import TextPicker from "./TextPicker";
 import ShareButton from "./ShareButton";
 import DecalManager from "./DecalManager";
 import Tab from "./Tab";
+import ThemeToggle from "./ThemeToggle";
 
 export {
   CustomButton,
@@ -16,4 +17,5 @@ export {
   ShareButton,
   DecalManager,
   Tab,
+  ThemeToggle,
 };

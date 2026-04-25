@@ -2,6 +2,18 @@ import { proxy, subscribe } from "valtio";
 import config from "../config/config";
 
 const STORAGE_KEY = "shirt-designer-state";
+const THEME_KEY = "shirt-designer-theme";
+
+const loadInitialTheme = () => {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "dark" || saved === "light") return saved;
+  } catch {}
+  return typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
 
 const DEFAULT_LOGO = {
   id: "default",
@@ -69,7 +81,15 @@ let pendingPersisted = loadPersisted();
 const state = proxy({
   ...defaultState,
   intro: true,
+  theme: loadInitialTheme(),
 });
+
+export const toggleTheme = () => {
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  try {
+    localStorage.setItem(THEME_KEY, state.theme);
+  } catch {}
+};
 
 export const enterCustomizer = () => {
   if (!state.intro) return;
@@ -84,7 +104,12 @@ export const enterCustomizer = () => {
 subscribe(state, () => {
   if (state.isDragging) return;
   try {
-    const { intro: _intro, isDragging: _isDragging, ...rest } = state;
+    const {
+      intro: _intro,
+      isDragging: _isDragging,
+      theme: _theme,
+      ...rest
+    } = state;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
   } catch {
     // Quota exceeded or storage disabled — fail silently.
