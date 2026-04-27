@@ -21,7 +21,7 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
           outline: `2px solid ${getContrastingColor(snap.color)}`,
           outlineOffset: "2px",
         }
-      : { backgroundColor: "transparent", opacity: 1 };
+      : { opacity: 1 };
 
   return (
     <button
