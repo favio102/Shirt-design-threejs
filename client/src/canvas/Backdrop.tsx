@@ -1,8 +1,12 @@
 import React, { useRef } from "react";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
+import { useSnapshot } from "valtio";
+import { state } from "../store";
 
 export const Backdrop = () => {
   const shadows = useRef();
+  const snap = useSnapshot(state);
+  const isDark = snap.theme === "dark";
 
   return (
     <AccumulativeShadows
@@ -10,7 +14,8 @@ export const Backdrop = () => {
       temporal
       frames={60}
       alphaTest={0.85}
-      // to adjust color
+      color={isDark ? "#ffffff" : "#000000"}
+      opacity={isDark ? 0.35 : 0.5}
       scale={5}
       rotation={[Math.PI / 2, 0, 0]}
       position={[0, 0, -0.14]}
