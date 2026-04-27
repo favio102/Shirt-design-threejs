@@ -37,7 +37,7 @@ export const CustomButton = ({ type, title, customStyles, handleClick }: Props) 
   return (
     <button
       type="button"
-      className={`px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${outlineClasses} ${customStyles}`}
+      className={`btn-fx px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${outlineClasses} ${customStyles}`}
       style={generateStyle(type)}
       onClick={handleClick}
     >

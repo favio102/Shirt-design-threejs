@@ -31,7 +31,7 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
       aria-label={tab.label}
       aria-pressed={isFilterTab ? !!isActiveTab : undefined}
       aria-expanded={isFilterTab ? undefined : !!isActiveTab}
-      className={`tab-btn tooltip-top ${
+      className={`tab-btn btn-fx tooltip-top ${
         isFilterTab ? "rounded-full glassmorphism" : "rounded-4"
       }`}
       onClick={handleClick}
