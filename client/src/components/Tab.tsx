@@ -17,12 +17,19 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
       ? { backgroundColor: snap.color, opacity: 0.7 }
       : { backgroundColor: "transparent", opacity: 1 };
 
+  const ringStyles =
+    isFilterTab && isActiveTab
+      ? "ring-2 ring-offset-2 ring-gray-800"
+      : "";
+
   return (
-    <div
+    <button
+      type="button"
       key={tab.name}
+      aria-pressed={isFilterTab ? !!isActiveTab : undefined}
       className={`tab-btn ${
         isFilterTab ? "rounded-full glassmorphism" : "rounded-4"
-      }`}
+      } ${ringStyles}`}
       onClick={handleClick}
       style={activeStyles}
     >
@@ -35,7 +42,7 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
           isFilterTab ? "w-2/3 h-2/3" : "w-11/12 h-11/12 object-contain"
         }`}
       />
-    </div>
+    </button>
   );
 };
 

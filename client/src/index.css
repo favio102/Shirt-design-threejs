@@ -48,7 +48,7 @@ html {
 }
 
 .aipicker-textarea {
-  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none flex-1;
+  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none flex-1 focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500;
 }
 
 .filepicker-container {
@@ -64,7 +64,7 @@ html {
 }
 
 .textpicker-input {
-  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none rounded;
+  @apply w-full bg-transparent text-sm border border-gray-300 p-2 outline-none rounded focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500;
 }
 
 .filepicker-label {
@@ -72,7 +72,7 @@ html {
 }
 
 .tab-btn {
-  @apply w-14 h-14 flex justify-center items-center cursor-pointer select-none;
+  @apply w-14 h-14 flex justify-center items-center cursor-pointer select-none border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
 }
 
 .glassmorphism {

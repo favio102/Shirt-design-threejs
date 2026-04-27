@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import { CustomButton } from "./CustomButton";
 
 const FONT_OPTIONS = [
   "Arial",
@@ -11,13 +11,14 @@ const FONT_OPTIONS = [
   "Verdana",
 ];
 
-const TextPicker = ({ options, setOptions, applyText }) => {
+export const TextPicker = ({ options, setOptions, applyText }) => {
   const update = (patch) => setOptions((prev) => ({ ...prev, ...patch }));
 
   return (
     <div className="textpicker-container">
       <input
         type="text"
+        aria-label="Text content"
         placeholder="Type your text…"
         value={options.text}
         maxLength={32}
@@ -26,9 +27,10 @@ const TextPicker = ({ options, setOptions, applyText }) => {
       />
       <div className="flex items-center gap-2 mt-2">
         <select
+          aria-label="Font"
           value={options.font}
           onChange={(e) => update({ font: e.target.value })}
-          className="text-xs flex-1 px-2 py-1 rounded border border-gray-300 bg-white outline-none"
+          className="text-xs flex-1 px-2 py-1 rounded border border-gray-300 bg-white outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500"
         >
           {FONT_OPTIONS.map((f) => (
             <option key={f} value={f} style={{ fontFamily: f }}>
@@ -62,4 +64,3 @@ const TextPicker = ({ options, setOptions, applyText }) => {
   );
 };
 
-export default TextPicker;

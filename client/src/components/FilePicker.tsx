@@ -1,7 +1,7 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import { CustomButton } from "./CustomButton";
 
-const FilePicker = ({ file, setFile, readFile }) => {
+export const FilePicker = ({ file, setFile, readFile }) => {
   return (
     <div className="filepicker-container">
       <div className="flex-1 flex flex-col">
@@ -37,4 +37,3 @@ const FilePicker = ({ file, setFile, readFile }) => {
   );
 };
 
-export default FilePicker;

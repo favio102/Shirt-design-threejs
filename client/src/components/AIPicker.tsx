@@ -1,8 +1,8 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import { CustomButton } from "./CustomButton";
 import { AIStyles } from "../config/constants";
 
-const AIPicker = ({
+export const AIPicker = ({
   prompt,
   setPrompt,
   generatingImg,
@@ -17,6 +17,10 @@ const AIPicker = ({
   return (
     <div className="aipicker-container">
       <textarea
+        id="ai-prompt"
+        aria-label="AI prompt"
+        aria-invalid={!!error}
+        aria-describedby={error ? "ai-prompt-error" : undefined}
         placeholder="Ask AI..."
         rows={3}
         value={prompt}
@@ -58,7 +62,7 @@ const AIPicker = ({
         </div>
       )}
       {error && (
-        <p className="text-xs text-red-500 break-words">{error}</p>
+        <p id="ai-prompt-error" role="alert" className="text-xs text-red-500 break-words">{error}</p>
       )}
       <div className="flex flex-wrap gap-3">
         {generatingImg ? (
@@ -93,4 +97,3 @@ const AIPicker = ({
   );
 };
 
-export default AIPicker;

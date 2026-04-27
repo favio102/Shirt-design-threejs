@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import { MotionConfig } from "framer-motion";
 import { useSnapshot } from "valtio";
 import Canvas from "./canvas";
-import Customizer from "./pages/Customizer";
+import { Customizer } from "./pages/Customizer";
 import { Home } from "./pages/Home";
 import CanvasErrorBoundary from "./components/CanvasErrorBoundary";
 import { ThemeToggle } from "./components";
@@ -16,14 +17,16 @@ export function App() {
   }, [snap.theme]);
 
   return (
-    <main className="app transition-all ease-in dark:bg-neutral-900">
-      <Home />
-      <CanvasErrorBoundary>
-        <Canvas />
-      </CanvasErrorBoundary>
-      <Customizer />
-      <ThemeToggle />
-    </main>
+    <MotionConfig reducedMotion="user">
+      <main className="app transition-all ease-in dark:bg-neutral-900">
+        <Home />
+        <CanvasErrorBoundary>
+          <Canvas />
+        </CanvasErrorBoundary>
+        <Customizer />
+        <ThemeToggle />
+      </main>
+    </MotionConfig>
   );
 }
 

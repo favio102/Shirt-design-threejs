@@ -25,7 +25,7 @@ import {
   Tab,
 } from "../components";
 
-const Customizer = () => {
+export const Customizer = () => {
   const snap = useSnapshot(state);
   const [file, setFile] = useState("");
   const [prompt, setPrompt] = useState("");
@@ -255,6 +255,8 @@ const Customizer = () => {
           {aiError && activeEditorTab !== "aipicker" && (
             <motion.div
               key="ai-error-toast"
+              role="alert"
+              aria-live="assertive"
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
@@ -345,4 +347,3 @@ const Customizer = () => {
   );
 };
 
-export default Customizer;

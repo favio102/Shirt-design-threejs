@@ -21,8 +21,10 @@ export const DecalManager = () => {
               <div key={l.id} className="relative">
                 <button
                   type="button"
+                  aria-label="Select this logo"
+                  aria-pressed={isActive}
                   onClick={() => (state.activeLogoId = l.id)}
-                  className={`w-8 h-8 rounded border bg-white/60 p-0.5 ${
+                  className={`w-8 h-8 rounded border bg-white/60 p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
                     isActive ? "border-gray-800" : "border-gray-300"
                   }`}
                 >
@@ -50,10 +52,14 @@ export const DecalManager = () => {
 
       {active && (
         <>
-          <label className="text-[10px] font-bold text-gray-700 mt-2">
+          <label
+            htmlFor="logo-rotation"
+            className="text-[10px] font-bold text-gray-700 mt-2"
+          >
             Rotation
           </label>
           <input
+            id="logo-rotation"
             type="range"
             min={-Math.PI}
             max={Math.PI}
@@ -70,8 +76,14 @@ export const DecalManager = () => {
             }
             className="w-full"
           />
-          <label className="text-[10px] font-bold text-gray-700">Scale</label>
+          <label
+            htmlFor="logo-scale"
+            className="text-[10px] font-bold text-gray-700"
+          >
+            Scale
+          </label>
           <input
+            id="logo-scale"
             type="range"
             min={0.05}
             max={0.4}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSnapshot } from "valtio";
 import state from "../store";
 import config from "../config/config";
-import CustomButton from "./CustomButton";
+import { CustomButton } from "./CustomButton";
 
 type ShareState =
   | { status: "idle" }
@@ -10,7 +10,7 @@ type ShareState =
   | { status: "ready"; url: string }
   | { status: "error"; error: string };
 
-const ShareButton = () => {
+export const ShareButton = () => {
   const snap = useSnapshot(state);
   const [share, setShare] = useState<ShareState>({ status: "idle" });
 
@@ -106,4 +106,3 @@ const ShareButton = () => {
   );
 };
 
-export default ShareButton;
