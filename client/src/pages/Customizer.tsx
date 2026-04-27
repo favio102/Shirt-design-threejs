@@ -24,6 +24,7 @@ import {
   DecalManager,
   Tab,
 } from "../components";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 
 export const Customizer = () => {
   const snap = useSnapshot(state);
@@ -41,6 +42,7 @@ export const Customizer = () => {
     color: "#000000",
   });
   const [activeEditorTab, setActiveEditorTab] = useState("");
+  const [pendingDownload, setPendingDownload] = useState<null | "single" | "mockup">(null);
 
   useEffect(() => {
     if (!aiError) return;
@@ -360,13 +362,34 @@ export const Customizer = () => {
                 isFilterTab
                 isActiveTab={activeFilterTab[tab.name]}
                 handleClick={() => {
-                  if (tab.name === "download") downloadCanvasToImage();
-                  else if (tab.name === "mockup") downloadAllViews();
+                  if (tab.name === "download") setPendingDownload("single");
+                  else if (tab.name === "mockup") setPendingDownload("mockup");
                   else handleActiveFilterTab(tab.name);
                 }}
               />
             ))}
           </motion.div>
+
+          <ConfirmDialog
+            open={pendingDownload !== null}
+            title={
+              pendingDownload === "mockup"
+                ? "Download four-view mockup?"
+                : "Download design as PNG?"
+            }
+            content={
+              pendingDownload === "mockup"
+                ? "Saves a 2x2 grid of front, back, left, and right views."
+                : "Saves the current 3D view as a PNG."
+            }
+            confirmLabel="Download"
+            onConfirm={() => {
+              if (pendingDownload === "single") downloadCanvasToImage();
+              else if (pendingDownload === "mockup") downloadAllViews();
+              setPendingDownload(null);
+            }}
+            onCancel={() => setPendingDownload(null)}
+          />
         </>
       )}
     </AnimatePresence>
