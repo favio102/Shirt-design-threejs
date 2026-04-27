@@ -20,18 +20,24 @@ export const CustomButton = ({ type, title, customStyles, handleClick }: Props) 
         color: getContrastingColor(snap.color),
       };
     } else if (type === "outline") {
+      // Border carries the brand color; text/background stay readable
+      // regardless of which color the user picks.
       return {
         borderWidth: "1px",
         borderColor: snap.color,
-        color: snap.color,
       };
     }
   };
 
+  const outlineClasses =
+    type === "outline"
+      ? "bg-white/80 text-gray-900 hover:bg-white dark:bg-neutral-800/80 dark:text-neutral-100 dark:hover:bg-neutral-800"
+      : "";
+
   return (
     <button
       type="button"
-      className={`px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${customStyles}`}
+      className={`px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${outlineClasses} ${customStyles}`}
       style={generateStyle(type)}
       onClick={handleClick}
     >

@@ -260,7 +260,7 @@ export const Customizer = () => {
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
-              className="fixed top-5 left-1/2 -translate-x-1/2 z-30 bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 rounded-md shadow max-w-[80vw] text-center"
+              className="fixed top-5 left-1/2 -translate-x-1/2 z-30 bg-red-50 border border-red-200 text-red-700 dark:bg-red-950/80 dark:border-red-800 dark:text-red-200 text-xs px-3 py-2 rounded-md shadow max-w-[80vw] text-center"
             >
               {aiError}
             </motion.div>
@@ -271,9 +271,9 @@ export const Customizer = () => {
             {...slideAnimation("left")}
           >
             <div className="flex items-center min-h-screen ms-3">
-              <div className="editortabs-container tabs bg-sky-300">
+              <div className="editortabs-container tabs bg-sky-300 dark:bg-neutral-200 dark:border-neutral-300">
                 {EditorTabs.map((tab) => (
-                  <div key={tab.name} className="rounded-lg hover:bg-sky-200">
+                  <div key={tab.name} className="rounded-lg hover:bg-sky-200 dark:hover:bg-neutral-100">
                     <Tab
                       tab={tab}
                       handleClick={() => {

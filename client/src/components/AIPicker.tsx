@@ -37,8 +37,8 @@ export const AIPicker = ({
               onClick={() => setStyle(active ? "" : s.key)}
               className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
                 active
-                  ? "bg-gray-800 text-white border-gray-800"
-                  : "bg-white/40 text-gray-700 border-gray-300 hover:bg-white/60"
+                  ? "bg-gray-800 text-white border-gray-800 dark:bg-neutral-100 dark:text-neutral-900 dark:border-neutral-100"
+                  : "bg-white/40 text-gray-700 border-gray-300 hover:bg-white/60 dark:bg-white/10 dark:text-neutral-200 dark:border-neutral-600 dark:hover:bg-white/20"
               }`}
             >
               {s.label}
@@ -54,7 +54,7 @@ export const AIPicker = ({
               type="button"
               onClick={() => setPrompt(p)}
               title={p}
-              className="text-[10px] px-2 py-0.5 rounded-full border bg-white/30 text-gray-700 border-gray-300 hover:bg-white/60 max-w-[80px] truncate"
+              className="text-[10px] px-2 py-0.5 rounded-full border bg-white/30 text-gray-700 border-gray-300 hover:bg-white/60 max-w-[80px] truncate dark:bg-white/5 dark:text-neutral-200 dark:border-neutral-600 dark:hover:bg-white/15"
             >
               {p}
             </button>
@@ -62,15 +62,15 @@ export const AIPicker = ({
         </div>
       )}
       {error && (
-        <p id="ai-prompt-error" role="alert" className="text-xs text-red-500 break-words">{error}</p>
+        <p id="ai-prompt-error" role="alert" className="text-xs text-red-600 dark:text-red-400 break-words">{error}</p>
       )}
       <div className="flex flex-wrap gap-3">
         {generatingImg ? (
           <div className="flex-1 flex flex-col gap-1">
-            <p className="text-xs text-gray-700">Generating {progress}%</p>
-            <div className="w-full h-1.5 bg-gray-200 rounded overflow-hidden">
+            <p className="text-xs text-gray-700 dark:text-neutral-200">Generating {progress}%</p>
+            <div className="w-full h-1.5 bg-gray-200 dark:bg-neutral-700 rounded overflow-hidden">
               <div
-                className="h-full bg-gray-800 transition-all duration-200"
+                className="h-full bg-gray-800 dark:bg-neutral-100 transition-all duration-200"
                 style={{ width: `${progress}%` }}
               />
             </div>

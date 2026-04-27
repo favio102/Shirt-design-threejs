@@ -8,9 +8,9 @@ export const DecalManager = () => {
 
   return (
     <div className="decalmanager-container">
-      <p className="text-[10px] font-bold text-gray-700">Logos</p>
+      <p className="text-[10px] font-bold text-gray-700 dark:text-neutral-200">Logos</p>
       {snap.logos.length === 0 ? (
-        <p className="text-[10px] text-gray-700 mt-1">
+        <p className="text-[10px] text-gray-700 dark:text-neutral-300 mt-1">
           No logos yet. Add one with the file, AI, or text picker.
         </p>
       ) : (
@@ -24,8 +24,10 @@ export const DecalManager = () => {
                   aria-label="Select this logo"
                   aria-pressed={isActive}
                   onClick={() => (state.activeLogoId = l.id)}
-                  className={`w-8 h-8 rounded border bg-white/60 p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
-                    isActive ? "border-gray-800" : "border-gray-300"
+                  className={`w-8 h-8 rounded border bg-white/60 dark:bg-neutral-700 p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
+                    isActive
+                      ? "border-gray-800 dark:border-neutral-100"
+                      : "border-gray-300 dark:border-neutral-600"
                   }`}
                 >
                   <img
@@ -54,7 +56,7 @@ export const DecalManager = () => {
         <>
           <label
             htmlFor="logo-rotation"
-            className="text-[10px] font-bold text-gray-700 mt-2"
+            className="text-[10px] font-bold text-gray-700 dark:text-neutral-200 mt-2"
           >
             Rotation
           </label>
@@ -78,7 +80,7 @@ export const DecalManager = () => {
           />
           <label
             htmlFor="logo-scale"
-            className="text-[10px] font-bold text-gray-700"
+            className="text-[10px] font-bold text-gray-700 dark:text-neutral-200"
           >
             Scale
           </label>
