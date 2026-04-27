@@ -8,7 +8,7 @@ export const DecalManager = () => {
 
   return (
     <div className="decalmanager-container">
-      <p className="text-xs md:text-sm font-bold text-gray-900 dark:text-neutral-100">Logos</p>
+      <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-neutral-100">Logos</p>
       {snap.logos.length === 0 ? (
         <p className="text-xs md:text-sm text-gray-800 dark:text-neutral-200 mt-1">
           No logos yet. Add one with the file, AI, or text picker.
@@ -56,7 +56,7 @@ export const DecalManager = () => {
         <>
           <label
             htmlFor="logo-rotation"
-            className="text-xs md:text-sm font-bold text-gray-900 dark:text-neutral-100 mt-2"
+            className="text-xs md:text-sm font-medium text-gray-900 dark:text-neutral-100 mt-2"
           >
             Rotation
           </label>
@@ -80,7 +80,7 @@ export const DecalManager = () => {
           />
           <label
             htmlFor="logo-scale"
-            className="text-xs md:text-sm font-bold text-gray-900 dark:text-neutral-100"
+            className="text-xs md:text-sm font-medium text-gray-900 dark:text-neutral-100"
           >
             Scale
           </label>
