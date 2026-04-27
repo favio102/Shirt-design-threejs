@@ -13,22 +13,27 @@ import {
 export const EditorTabs = [
   {
     name: "colorpicker",
+    label: "Pick a color",
     icon: swatch,
   },
   {
     name: "filepicker",
+    label: "Upload image",
     icon: fileIcon,
   },
   {
     name: "aipicker",
+    label: "Generate with AI",
     icon: ai,
   },
   {
     name: "textpicker",
+    label: "Add text",
     icon: textIcon,
   },
   {
     name: "decalmanager",
+    label: "Manage logos",
     icon: layersIcon,
   },
 ];
@@ -36,18 +41,22 @@ export const EditorTabs = [
 export const FilterTabs = [
   {
     name: "logoShirt",
+    label: "Toggle logo decal",
     icon: logoShirt,
   },
   {
     name: "stylishShirt",
+    label: "Toggle full pattern",
     icon: stylishShirt,
   },
   {
     name: "download",
+    label: "Download PNG",
     icon: download
   },
   {
     name: "mockup",
+    label: "Download mockup (four views)",
     icon: gridIcon
   }
 ];

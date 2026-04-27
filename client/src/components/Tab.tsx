@@ -4,7 +4,7 @@ import { state } from "../store";
 import { getContrastingColor } from "../config/helpers";
 
 type Props = {
-  tab: { name: string; icon: string };
+  tab: { name: string; label: string; icon: string };
   isFilterTab?: boolean;
   isActiveTab?: boolean;
   handleClick?: () => void;
@@ -27,8 +27,10 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
     <button
       type="button"
       key={tab.name}
+      data-tooltip={tab.label}
+      aria-label={tab.label}
       aria-pressed={isFilterTab ? !!isActiveTab : undefined}
-      className={`tab-btn ${
+      className={`tab-btn tooltip-top ${
         isFilterTab ? "rounded-full glassmorphism" : "rounded-4"
       }`}
       onClick={handleClick}
@@ -36,7 +38,7 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
     >
       <img
         src={tab.icon}
-        alt={`${tab.name} tool`}
+        alt=""
         width={24}
         height={24}
         className={`${
