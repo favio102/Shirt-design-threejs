@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 import { state, resetState, addLogo, updateActiveLogo } from "../store";
@@ -47,6 +47,21 @@ export const Customizer = () => {
     const t = setTimeout(() => setAiError(""), 5000);
     return () => clearTimeout(t);
   }, [aiError]);
+
+  const editorTabsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!activeEditorTab) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      if (
+        editorTabsRef.current &&
+        !editorTabsRef.current.contains(e.target as Node)
+      ) {
+        setActiveEditorTab("");
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [activeEditorTab]);
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
     stylishShirt: false,
@@ -271,7 +286,7 @@ export const Customizer = () => {
             {...slideAnimation("left")}
           >
             <div className="flex items-center min-h-screen ms-3">
-              <div className="editortabs-container tabs bg-sky-300 dark:bg-neutral-200 dark:border-neutral-300">
+              <div ref={editorTabsRef} className="editortabs-container tabs bg-sky-300 dark:bg-neutral-200 dark:border-neutral-300">
                 {EditorTabs.map((tab) => (
                   <div key={tab.name} className="rounded-lg hover:bg-sky-200 dark:hover:bg-neutral-100">
                     <Tab
