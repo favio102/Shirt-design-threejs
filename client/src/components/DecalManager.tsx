@@ -24,7 +24,7 @@ export const DecalManager = () => {
                   aria-label="Select this logo"
                   aria-pressed={isActive}
                   onClick={() => (state.activeLogoId = l.id)}
-                  className={`w-8 h-8 rounded border bg-white/60 dark:bg-neutral-700 p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
+                  className={`w-12 h-12 md:w-16 md:h-16 rounded border bg-white/60 dark:bg-neutral-700 p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
                     isActive
                       ? "border-gray-800 dark:border-neutral-100"
                       : "border-gray-300 dark:border-neutral-600"
@@ -33,8 +33,8 @@ export const DecalManager = () => {
                   <img
                     src={l.map}
                     alt="Saved logo preview"
-                    width={32}
-                    height={32}
+                    width={64}
+                    height={64}
                     className="w-full h-full object-contain"
                   />
                 </button>
