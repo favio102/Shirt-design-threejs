@@ -286,21 +286,32 @@ export const Customizer = () => {
             {...slideAnimation("left")}
           >
             <div className="flex items-center min-h-screen ms-3">
-              <div ref={editorTabsRef} className="editortabs-container tabs bg-sky-300 dark:bg-neutral-200 dark:border-neutral-300">
-                {EditorTabs.map((tab) => (
-                  <div key={tab.name} className="rounded-lg hover:bg-sky-200 dark:hover:bg-neutral-100">
-                    <Tab
-                      tab={tab}
-                      handleClick={() => {
-                        if (activeEditorTab === tab.name) {
-                          setActiveEditorTab("");
-                        } else {
-                          setActiveEditorTab(tab.name);
-                        }
-                      }}
-                    />
-                  </div>
-                ))}
+              <div ref={editorTabsRef} className="editortabs-container tabs bg-sky-300 dark:bg-neutral-400 dark:border-neutral-500">
+                {EditorTabs.map((tab) => {
+                  const isActive = activeEditorTab === tab.name;
+                  return (
+                    <div
+                      key={tab.name}
+                      className={`rounded-lg transition-colors hover:bg-sky-200 dark:hover:bg-neutral-300 ${
+                        isActive
+                          ? "bg-sky-200 dark:bg-neutral-300 ring-2 ring-sky-600 dark:ring-neutral-700"
+                          : ""
+                      }`}
+                    >
+                      <Tab
+                        tab={tab}
+                        isActiveTab={isActive}
+                        handleClick={() => {
+                          if (activeEditorTab === tab.name) {
+                            setActiveEditorTab("");
+                          } else {
+                            setActiveEditorTab(tab.name);
+                          }
+                        }}
+                      />
+                    </div>
+                  );
+                })}
                 {generateTabContent()}
               </div>
             </div>
