@@ -69,7 +69,7 @@ export const CameraRig = ({ children }: { children: React.ReactNode }) => {
       rot[2] = 0;
     } else {
       rot[0] = rootState.pointer.y / 10;
-      rot[1] = -rootState.pointer.x / 5;
+      rot[1] = -rootState.pointer.x / 5 + snap.viewRotation;
       rot[2] = 0;
     }
 

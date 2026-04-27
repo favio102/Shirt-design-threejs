@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import { state, resetState, addLogo, updateActiveLogo } from "../store";
+import { state, resetState, addLogo, updateActiveLogo, rotateView } from "../store";
 import {
   downloadCanvasToImage,
   downloadAllViews,
@@ -388,18 +388,45 @@ export const Customizer = () => {
             className="filtertabs-container"
             {...slideAnimation("up")}
           >
-            {FilterTabs.map((tab) => (
-              <Tab
-                key={tab.name}
-                tab={tab}
-                isFilterTab
-                isActiveTab={activeFilterTab[tab.name]}
-                handleClick={() => {
-                  if (tab.name === "download") setPendingDownload("single");
-                  else if (tab.name === "mockup") setPendingDownload("mockup");
-                  else handleActiveFilterTab(tab.name);
-                }}
-              />
+            {FilterTabs.map((tab, i) => (
+              <React.Fragment key={tab.name}>
+                <Tab
+                  tab={tab}
+                  isFilterTab
+                  isActiveTab={activeFilterTab[tab.name]}
+                  handleClick={() => {
+                    if (tab.name === "download") setPendingDownload("single");
+                    else if (tab.name === "mockup") setPendingDownload("mockup");
+                    else handleActiveFilterTab(tab.name);
+                  }}
+                />
+                {tab.name === "stylishShirt" && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label="Rotate left"
+                      data-tooltip="Rotate left"
+                      onClick={() => rotateView(-Math.PI / 4)}
+                      className="tab-btn btn-fx tooltip-top rounded-full glassmorphism text-gray-900"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 18l-6-6 6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Rotate right"
+                      data-tooltip="Rotate right"
+                      onClick={() => rotateView(Math.PI / 4)}
+                      className="tab-btn btn-fx tooltip-top rounded-full glassmorphism text-gray-900"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </button>
+                  </>
+                )}
+              </React.Fragment>
             ))}
           </motion.div>
 

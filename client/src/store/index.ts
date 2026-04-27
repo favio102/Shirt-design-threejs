@@ -33,6 +33,7 @@ const defaultState = {
   activeLogoId: DEFAULT_LOGO.id,
   fullDecal: "./lion.png",
   isDragging: false,
+  viewRotation: 0,
 };
 
 // Convert any pre-multi-decal saved shape (single logoDecal/logoPosition)
@@ -169,6 +170,10 @@ export const updateActiveLogo = (patch) => {
   const logo = state.logos.find((l) => l.id === state.activeLogoId);
   if (!logo) return;
   Object.assign(logo, patch);
+};
+
+export const rotateView = (deltaRadians: number) => {
+  state.viewRotation += deltaRadians;
 };
 
 const designId = new URLSearchParams(window.location.search).get("design");
