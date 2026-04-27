@@ -18,7 +18,16 @@ export function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="app transition-all ease-in dark:bg-neutral-900">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:bg-white focus:text-gray-900 focus:rounded focus:shadow focus-visible:outline-2 focus-visible:outline-blue-500"
+      >
+        Skip to main content
+      </a>
+      <main
+        id="main-content"
+        className="app transition-all ease-in dark:bg-neutral-900"
+      >
         <Home />
         <CanvasErrorBoundary>
           <Canvas />

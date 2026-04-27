@@ -10,7 +10,7 @@ export const DecalManager = () => {
     <div className="decalmanager-container">
       <p className="text-[10px] font-bold text-gray-700">Logos</p>
       {snap.logos.length === 0 ? (
-        <p className="text-[10px] text-gray-500 mt-1">
+        <p className="text-[10px] text-gray-700 mt-1">
           No logos yet. Add one with the file, AI, or text picker.
         </p>
       ) : (

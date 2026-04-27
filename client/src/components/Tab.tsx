@@ -1,6 +1,7 @@
 import React from "react";
 import { useSnapshot } from "valtio";
 import state from "../store";
+import { getContrastingColor } from "../config/helpers";
 
 type Props = {
   tab: { name: string; icon: string };
@@ -14,13 +15,13 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
 
   const activeStyles =
     isFilterTab && isActiveTab
-      ? { backgroundColor: snap.color, opacity: 0.7 }
+      ? {
+          backgroundColor: snap.color,
+          opacity: 0.7,
+          outline: `2px solid ${getContrastingColor(snap.color)}`,
+          outlineOffset: "2px",
+        }
       : { backgroundColor: "transparent", opacity: 1 };
-
-  const ringStyles =
-    isFilterTab && isActiveTab
-      ? "ring-2 ring-offset-2 ring-gray-800"
-      : "";
 
   return (
     <button
@@ -29,7 +30,7 @@ export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
       aria-pressed={isFilterTab ? !!isActiveTab : undefined}
       className={`tab-btn ${
         isFilterTab ? "rounded-full glassmorphism" : "rounded-4"
-      } ${ringStyles}`}
+      }`}
       onClick={handleClick}
       style={activeStyles}
     >

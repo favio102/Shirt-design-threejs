@@ -54,7 +54,7 @@ export const AIPicker = ({
               type="button"
               onClick={() => setPrompt(p)}
               title={p}
-              className="text-[10px] px-2 py-0.5 rounded-full border bg-white/30 text-gray-600 border-gray-300 hover:bg-white/60 max-w-[80px] truncate"
+              className="text-[10px] px-2 py-0.5 rounded-full border bg-white/30 text-gray-700 border-gray-300 hover:bg-white/60 max-w-[80px] truncate"
             >
               {p}
             </button>
