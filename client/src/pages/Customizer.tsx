@@ -42,6 +42,7 @@ export const Customizer = () => {
     color: "#000000",
   });
   const [activeEditorTab, setActiveEditorTab] = useState("");
+  const [isEditorLocked, setIsEditorLocked] = useState(false);
   const [pendingDownload, setPendingDownload] = useState<null | "single" | "mockup">(null);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export const Customizer = () => {
         !editorTabsRef.current.contains(e.target as Node)
       ) {
         setActiveEditorTab("");
+        setIsEditorLocked(false);
       }
     };
     document.addEventListener("pointerdown", handlePointerDown);
@@ -288,12 +290,21 @@ export const Customizer = () => {
             {...slideAnimation("left")}
           >
             <div className="flex items-center min-h-screen ms-3">
-              <div ref={editorTabsRef} className="editortabs-container tabs bg-sky-300 dark:bg-neutral-400 dark:border-neutral-500">
+              <div
+                ref={editorTabsRef}
+                className="editortabs-container tabs bg-sky-300 dark:bg-neutral-400 dark:border-neutral-500"
+                onMouseLeave={() => {
+                  if (!isEditorLocked) setActiveEditorTab("");
+                }}
+              >
                 {EditorTabs.map((tab) => {
                   const isActive = activeEditorTab === tab.name;
                   return (
                     <div
                       key={tab.name}
+                      onMouseEnter={() => {
+                        if (!isEditorLocked) setActiveEditorTab(tab.name);
+                      }}
                       className={`rounded-lg transition-colors hover:bg-sky-200 dark:hover:bg-neutral-300 ${
                         isActive
                           ? "bg-sky-200 dark:bg-neutral-300 ring-2 ring-sky-600 dark:ring-neutral-700"
@@ -304,10 +315,12 @@ export const Customizer = () => {
                         tab={tab}
                         isActiveTab={isActive}
                         handleClick={() => {
-                          if (activeEditorTab === tab.name) {
+                          if (isEditorLocked && activeEditorTab === tab.name) {
+                            setIsEditorLocked(false);
                             setActiveEditorTab("");
                           } else {
                             setActiveEditorTab(tab.name);
+                            setIsEditorLocked(true);
                           }
                         }}
                       />

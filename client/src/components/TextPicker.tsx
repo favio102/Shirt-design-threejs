@@ -30,7 +30,7 @@ export const TextPicker = ({ options, setOptions, applyText }) => {
           aria-label="Font"
           value={options.font}
           onChange={(e) => update({ font: e.target.value })}
-          className="text-xs flex-1 px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-100 outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500"
+          className="text-xs md:text-sm flex-1 px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-100 outline-none focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-blue-500"
         >
           {FONT_OPTIONS.map((f) => (
             <option key={f} value={f} style={{ fontFamily: f }}>
@@ -51,13 +51,13 @@ export const TextPicker = ({ options, setOptions, applyText }) => {
           type="outline"
           title="Logo"
           handleClick={() => applyText("logo")}
-          customStyles="text-xs"
+          customStyles="text-xs md:text-sm"
         />
         <CustomButton
           type="filled"
           title="Full"
           handleClick={() => applyText("full")}
-          customStyles="text-xs"
+          customStyles="text-xs md:text-sm"
         />
       </div>
     </div>

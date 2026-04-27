@@ -15,7 +15,7 @@ export const FilePicker = ({ file, setFile, readFile }) => {
           Upload File
         </label>
 
-        <p className="mt-2 text-gray-700 dark:text-neutral-300 text-xs truncate">
+        <p className="mt-2 text-gray-700 dark:text-neutral-300 text-xs md:text-sm truncate">
           {file === "" ? "No file selected" : file.name}
         </p>
       </div>
@@ -24,13 +24,13 @@ export const FilePicker = ({ file, setFile, readFile }) => {
           type="outline"
           title="Logo"
           handleClick={() => readFile("logo")}
-          customStyles="text-xs"
+          customStyles="text-xs md:text-sm"
         />
         <CustomButton
           type="filled"
           title="Full"
           handleClick={() => readFile("full")}
-          customStyles="text-xs"
+          customStyles="text-xs md:text-sm"
         />
       </div>
     </div>
