@@ -15,7 +15,7 @@ export const Backdrop = () => {
       frames={60}
       alphaTest={0.85}
       color={isDark ? "#ffffff" : "#000000"}
-      opacity={isDark ? 0.35 : 0.5}
+      opacity={isDark ? 0.35 : undefined}
       scale={5}
       rotation={[Math.PI / 2, 0, 0]}
       position={[0, 0, -0.14]}
