@@ -2,7 +2,7 @@ import React from "react";
 import { useSnapshot } from "valtio";
 import state, { removeLogo, updateActiveLogo } from "../store";
 
-const DecalManager = () => {
+export const DecalManager = () => {
   const snap = useSnapshot(state);
   const active = snap.logos.find((l) => l.id === snap.activeLogoId);
 
@@ -28,7 +28,9 @@ const DecalManager = () => {
                 >
                   <img
                     src={l.map}
-                    alt="logo"
+                    alt="Saved logo preview"
+                    width={32}
+                    height={32}
                     className="w-full h-full object-contain"
                   />
                 </button>
@@ -86,4 +88,3 @@ const DecalManager = () => {
   );
 };
 
-export default DecalManager;

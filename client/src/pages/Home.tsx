@@ -8,7 +8,7 @@ import {
   slideAnimation,
 } from "../config/motion";
 
-const Home = () => {
+export const Home = () => {
   const snap = useSnapshot(state);
 
   return (
@@ -18,7 +18,9 @@ const Home = () => {
           <motion.header {...slideAnimation("down")}>
             <img
               src="./lion.png"
-              alt="logo"
+              alt="Shirt Design site logo"
+              width={32}
+              height={32}
               className="w-8 h-8 object-contain"
             />
           </motion.header>
@@ -51,4 +53,3 @@ const Home = () => {
   );
 };
 
-export default Home;

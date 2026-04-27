@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useSnapshot } from "valtio";
 import Canvas from "./canvas";
 import Customizer from "./pages/Customizer";
-import Home from "./pages/Home";
+import { Home } from "./pages/Home";
 import CanvasErrorBoundary from "./components/CanvasErrorBoundary";
 import { ThemeToggle } from "./components";
 import state from "./store";
 
-function App() {
+export function App() {
   const snap = useSnapshot(state);
 
   useEffect(() => {
@@ -27,4 +27,3 @@ function App() {
   );
 }
 
-export default App;

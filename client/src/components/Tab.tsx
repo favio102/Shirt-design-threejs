@@ -9,7 +9,7 @@ type Props = {
   handleClick?: () => void;
 };
 
-const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
+export const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
   const snap = useSnapshot(state);
 
   const activeStyles =
@@ -28,7 +28,9 @@ const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
     >
       <img
         src={tab.icon}
-        alt={tab.name}
+        alt={`${tab.name} tool`}
+        width={24}
+        height={24}
         className={`${
           isFilterTab ? "w-2/3 h-2/3" : "w-11/12 h-11/12 object-contain"
         }`}
@@ -37,4 +39,3 @@ const Tab = ({ tab, isFilterTab, isActiveTab, handleClick }: Props) => {
   );
 };
 
-export default Tab;
