@@ -1,7 +1,7 @@
 import React from "react";
 import { SketchPicker } from "react-color";
 import { useSnapshot } from "valtio";
-import state from "../store";
+import { state } from "../store";
 
 const PRESET_COLORS = [
   "#EFBD48", // mustard (default)
@@ -16,7 +16,7 @@ const PRESET_COLORS = [
   "#000000", // black
 ];
 
-const ColorPicker = () => {
+export const ColorPicker = () => {
   const snap = useSnapshot(state);
 
   return (
@@ -31,4 +31,3 @@ const ColorPicker = () => {
   );
 };
 
-export default ColorPicker;

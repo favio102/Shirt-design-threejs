@@ -78,7 +78,7 @@ const loadPersisted = () => {
 // preview. The user's saved design is applied only when they click
 // "Customize it" via enterCustomizer().
 let pendingPersisted = loadPersisted();
-const state = proxy({
+export const state = proxy({
   ...defaultState,
   intro: true,
   theme: loadInitialTheme(),
@@ -101,7 +101,12 @@ export const enterCustomizer = () => {
   }
 };
 
-subscribe(state, () => {
+// Debounce localStorage writes so that high-frequency mutations
+// (color-picker drags, etc.) don't stringify-and-write per tick.
+const PERSIST_DEBOUNCE_MS = 300;
+let persistTimer: ReturnType<typeof setTimeout> | null = null;
+
+const persistNow = () => {
   if (state.isDragging) return;
   try {
     const {
@@ -114,6 +119,12 @@ subscribe(state, () => {
   } catch {
     // Quota exceeded or storage disabled — fail silently.
   }
+};
+
+subscribe(state, () => {
+  if (state.isDragging) return;
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = setTimeout(persistNow, PERSIST_DEBOUNCE_MS);
 });
 
 export const resetState = () => {
@@ -162,7 +173,9 @@ export const updateActiveLogo = (patch) => {
 
 const designId = new URLSearchParams(window.location.search).get("design");
 if (designId) {
-  fetch(`${config.designsUrl}/${designId}`)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10_000);
+  fetch(`${config.designsUrl}/${designId}`, { signal: controller.signal })
     .then((r) => (r.ok ? r.json() : Promise.reject(r)))
     .then((d) => {
       pendingPersisted = null;
@@ -186,7 +199,6 @@ if (designId) {
     })
     .catch((err) => {
       console.warn("Failed to load shared design:", err);
-    });
+    })
+    .finally(() => clearTimeout(timeoutId));
 }
-
-export default state;

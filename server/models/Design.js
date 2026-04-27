@@ -22,6 +22,4 @@ const DesignSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Design = mongoose.model("Design", DesignSchema);
-
-export default Design;
+export const Design = mongoose.model("Design", DesignSchema);

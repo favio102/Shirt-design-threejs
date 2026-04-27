@@ -1,5 +1,5 @@
 import React from "react";
-import state from "../store";
+import { state } from "../store";
 import { useSnapshot } from "valtio";
 import { getContrastingColor } from "../config/helpers";
 

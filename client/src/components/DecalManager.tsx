@@ -1,6 +1,6 @@
 import React from "react";
 import { useSnapshot } from "valtio";
-import state, { removeLogo, updateActiveLogo } from "../store";
+import { state, removeLogo, updateActiveLogo } from "../store";
 
 export const DecalManager = () => {
   const snap = useSnapshot(state);

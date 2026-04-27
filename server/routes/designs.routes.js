@@ -1,13 +1,13 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
-import Design from "../models/Design.js";
+import { Design } from "../models/Design.js";
 import {
   isDataUrl,
   uploadDataUrl,
   isCloudinaryConfigured,
 } from "../utils/cloudinary.js";
-import logger from "../utils/logger.js";
+import { logger } from "../utils/logger.js";
 
 const designsRouter = express.Router();
 

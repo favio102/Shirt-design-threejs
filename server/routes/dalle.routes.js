@@ -1,6 +1,6 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
-import logger from "../utils/logger.js";
+import { logger } from "../utils/logger.js";
 
 const dalleRouter = express.Router();
 

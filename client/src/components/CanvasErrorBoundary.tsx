@@ -3,7 +3,7 @@ import React from "react";
 type Props = { children?: React.ReactNode };
 type State = { error: Error | null };
 
-class CanvasErrorBoundary extends React.Component<Props, State> {
+export class CanvasErrorBoundary extends React.Component<Props, State> {
   state: State = { error: null };
 
   static getDerivedStateFromError(error: Error): State {
@@ -43,4 +43,3 @@ class CanvasErrorBoundary extends React.Component<Props, State> {
   }
 }
 
-export default CanvasErrorBoundary;

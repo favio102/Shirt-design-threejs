@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state, { resetState, addLogo, updateActiveLogo } from "../store";
+import { state, resetState, addLogo, updateActiveLogo } from "../store";
 import {
   downloadCanvasToImage,
   downloadAllViews,

@@ -9,11 +9,11 @@ import { Decal as _Decal, useGLTF, useTexture } from "@react-three/drei";
 // props, but R3F forwards them to the underlying material. Keep behavior
 // identical by widening the prop type.
 const Decal = _Decal as any;
-import state from "../store";
+import { state } from "../store";
 
 const HIT_RADIUS = 0.2;
 
-const Shirt = () => {
+export const Shirt = () => {
   const snap = useSnapshot(state);
   // TODO(#7): support multiple garment types — read from snap.garment, swap GLB
   // path + mesh name (e.g. "T_Shirt_male" → "Hoodie_male"). Needs hoodie/tank/
@@ -131,4 +131,3 @@ const Shirt = () => {
 
 useGLTF.preload("/shirt_baked.glb");
 
-export default Shirt;

@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { MotionConfig } from "framer-motion";
 import { useSnapshot } from "valtio";
-import Canvas from "./canvas";
-import { Customizer } from "./pages/Customizer";
+import { CanvasModel } from "./canvas";
 import { Home } from "./pages/Home";
-import CanvasErrorBoundary from "./components/CanvasErrorBoundary";
+import { CanvasErrorBoundary } from "./components/CanvasErrorBoundary";
 import { ThemeToggle } from "./components";
-import state from "./store";
+import { state } from "./store";
+
+const Customizer = lazy(() =>
+  import("./pages/Customizer").then((m) => ({ default: m.Customizer }))
+);
 
 export function App() {
   const snap = useSnapshot(state);
@@ -30,9 +33,11 @@ export function App() {
       >
         <Home />
         <CanvasErrorBoundary>
-          <Canvas />
+          <CanvasModel />
         </CanvasErrorBoundary>
-        <Customizer />
+        <Suspense fallback={null}>
+          <Customizer />
+        </Suspense>
         <ThemeToggle />
       </main>
     </MotionConfig>

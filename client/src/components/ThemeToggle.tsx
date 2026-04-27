@@ -1,7 +1,7 @@
 import { useSnapshot } from "valtio";
-import state, { toggleTheme } from "../store";
+import { state, toggleTheme } from "../store";
 
-const ThemeToggle = () => {
+export const ThemeToggle = () => {
   const snap = useSnapshot(state);
   const isDark = snap.theme === "dark";
 
@@ -18,4 +18,3 @@ const ThemeToggle = () => {
   );
 };
 
-export default ThemeToggle;

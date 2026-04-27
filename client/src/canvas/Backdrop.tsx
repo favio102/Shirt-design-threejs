@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 
-const Backdrop = () => {
+export const Backdrop = () => {
   const shadows = useRef();
 
   return (
@@ -35,4 +35,3 @@ const Backdrop = () => {
   );
 };
 
-export default Backdrop;

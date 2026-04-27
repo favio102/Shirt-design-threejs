@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center, Loader } from "@react-three/drei";
-import Shirt from "./Shirt";
-import Backdrop from "./Backdrop";
-import CameraRig from "./CameraRig";
-import Exporter from "./Exporter";
+import { Shirt } from "./Shirt";
+import { Backdrop } from "./Backdrop";
+import { CameraRig } from "./CameraRig";
+import { Exporter } from "./Exporter";
 
-const CanvasModel = () => {
+export const CanvasModel = () => {
   return (
     <>
       <Canvas
@@ -32,4 +32,3 @@ const CanvasModel = () => {
   );
 };
 
-export default CanvasModel;

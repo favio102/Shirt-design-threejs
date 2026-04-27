@@ -4,7 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { dalleRouter } from "./routes/dalle.routes.js";
 import { designsRouter } from "./routes/designs.routes.js";
-import logger from "./utils/logger.js";
+import { logger } from "./utils/logger.js";
 
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useSnapshot } from "valtio";
-import state, { enterCustomizer } from "../store";
+import { state, enterCustomizer } from "../store";
 import { CustomButton } from "../components";
 import {
   headContainerAnimation,

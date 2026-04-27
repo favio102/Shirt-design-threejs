@@ -8,7 +8,7 @@ import {
 
 const TARGET_LONGEST_SIDE = 2048;
 
-const Exporter = () => {
+export const Exporter = () => {
   const { gl, scene, camera } = useThree();
 
   useEffect(() => {
@@ -87,4 +87,3 @@ const Exporter = () => {
   return null;
 };
 
-export default Exporter;
