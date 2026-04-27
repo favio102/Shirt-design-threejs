@@ -20,15 +20,15 @@ html {
 }
 
 .home {
-  @apply w-fit xl:h-full flex xl:justify-between justify-start items-start flex-col xl:py-8 xl:px-36 sm:p-8 p-6 max-xl:gap-7 absolute z-10;
+  @apply w-full max-w-full xl:w-fit xl:h-full flex xl:justify-between justify-start items-start flex-col xl:py-8 xl:px-36 lg:p-8 sm:p-6 p-4 max-xl:gap-5 absolute z-10;
 }
 
 .home-content {
-  @apply flex-1 xl:justify-center justify-start flex flex-col gap-10;
+  @apply flex-1 max-w-full xl:justify-center justify-start flex flex-col gap-6 sm:gap-8 xl:gap-10;
 }
 
 .head-text {
-  @apply xl:text-[10rem] text-[6rem] xl:leading-[11rem] leading-[7rem] font-black text-black dark:text-neutral-100;
+  @apply text-[3rem] sm:text-[4.5rem] md:text-[6rem] xl:text-[10rem] leading-[3.25rem] sm:leading-[4.75rem] md:leading-[6.5rem] xl:leading-[11rem] font-black text-black dark:text-neutral-100 break-words;
 }
 
 .download-btn {
@@ -44,7 +44,8 @@ html {
 }
 
 .aipicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] rounded-md flex flex-col gap-4;
+  @apply fixed inset-x-0 bottom-0 z-20 w-full max-w-full glassmorphism p-3 h-[220px] rounded-t-md flex flex-col gap-4
+         md:absolute md:left-full md:right-auto md:inset-y-auto md:ml-3 md:w-[195px] md:max-w-[calc(100vw-5rem)] md:rounded-md;
 }
 
 .aipicker-textarea {
@@ -52,15 +53,18 @@ html {
 }
 
 .filepicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] flex flex-col rounded-md;
+  @apply fixed inset-x-0 bottom-0 z-20 w-full max-w-full glassmorphism p-3 h-[220px] rounded-t-md flex flex-col
+         md:absolute md:left-full md:right-auto md:inset-y-auto md:ml-3 md:w-[195px] md:max-w-[calc(100vw-5rem)] md:rounded-md;
 }
 
 .textpicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] max-w-[calc(100vw-5rem)] h-[220px] rounded-md flex flex-col;
+  @apply fixed inset-x-0 bottom-0 z-20 w-full max-w-full glassmorphism p-3 h-[220px] rounded-t-md flex flex-col
+         md:absolute md:left-full md:right-auto md:inset-y-auto md:ml-3 md:w-[195px] md:max-w-[calc(100vw-5rem)] md:rounded-md;
 }
 
 .decalmanager-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[210px] max-w-[calc(100vw-5rem)] rounded-md flex flex-col gap-1;
+  @apply fixed inset-x-0 bottom-0 z-20 w-full max-w-full glassmorphism p-3 rounded-t-md flex flex-col gap-1
+         md:absolute md:left-full md:right-auto md:inset-y-auto md:ml-3 md:w-[210px] md:max-w-[calc(100vw-5rem)] md:rounded-md;
 }
 
 .textpicker-input {
