@@ -6,11 +6,12 @@ import { getContrastingColor } from "../config/helpers";
 type Props = {
   type: "filled" | "outline";
   title: string;
+  icon?: React.ReactNode;
   customStyles?: string;
   handleClick?: () => void;
 };
 
-export const CustomButton = ({ type, title, customStyles, handleClick }: Props) => {
+export const CustomButton = ({ type, title, icon, customStyles, handleClick }: Props) => {
   const snap = useSnapshot(state);
 
   const generateStyle = (type: string) => {
@@ -37,10 +38,11 @@ export const CustomButton = ({ type, title, customStyles, handleClick }: Props) 
   return (
     <button
       type="button"
-      className={`btn-fx px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${outlineClasses} ${customStyles}`}
+      className={`btn-fx inline-flex items-center justify-center gap-1.5 px-2 py-1.5 flex-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${outlineClasses} ${customStyles}`}
       style={generateStyle(type)}
       onClick={handleClick}
     >
+      {icon && <span aria-hidden="true" className="inline-flex">{icon}</span>}
       {title}
     </button>
   );

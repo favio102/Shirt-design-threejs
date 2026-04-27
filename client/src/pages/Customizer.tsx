@@ -340,27 +340,47 @@ export const Customizer = () => {
               <CustomButton
                 type="outline"
                 title={
-                  generatingImg ? `Generating ${progress}%` : "Try Again"
+                  generatingImg ? `Generating ${progress}%` : "Try again"
+                }
+                icon={
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+                    <path d="M3 21v-5h5" />
+                  </svg>
                 }
                 handleClick={() =>
                   !generatingImg &&
                   handleSubmit(lastAiSubmission.type, lastAiSubmission)
                 }
-                customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+                customStyles="w-fit h-9 px-3 font-medium text-sm leading-none"
               />
             )}
             <ShareButton />
             <CustomButton
               type="outline"
               title="Reset"
+              icon={
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9" />
+                  <path d="M3 4v5h5" />
+                </svg>
+              }
               handleClick={handleReset}
-              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+              customStyles="w-fit h-9 px-3 font-medium text-sm leading-none"
             />
             <CustomButton
               type="filled"
-              title="Go Back"
+              title="Go back"
+              icon={
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" />
+                  <path d="M12 19l-7-7 7-7" />
+                </svg>
+              }
               handleClick={() => (state.intro = true)}
-              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+              customStyles="w-fit h-9 px-3 font-medium text-sm leading-none"
             />
           </motion.div>
 
