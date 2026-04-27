@@ -2,7 +2,7 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import logger from "../utils/logger.js";
 
-const router = express.Router();
+const dalleRouter = express.Router();
 
 const aiLimiter = rateLimit({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60 * 1000,
@@ -15,11 +15,11 @@ const aiLimiter = rateLimit({
   },
 });
 
-router.route("/").get((req, res) => {
+dalleRouter.route("/").get((req, res) => {
   res.status(200).json({ message: "Hello from image generation router" });
 });
 
-router.route("/").post(aiLimiter, async (req, res) => {
+dalleRouter.route("/").post(aiLimiter, async (req, res) => {
   try {
     const { prompt } = req.body;
     if (!prompt || typeof prompt !== "string") {
@@ -44,11 +44,8 @@ router.route("/").post(aiLimiter, async (req, res) => {
     res.status(200).json({ photo: image });
   } catch (error) {
     logger.error({ err: error }, "image generation failed");
-    res.status(500).json({
-      message: error?.message ?? "Something went wrong",
-      code: error?.code,
-    });
+    res.status(500).json({ message: "Image generation failed." });
   }
 });
 
-export default router;
+export { dalleRouter };

@@ -1,4 +1,5 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
 import Design from "../models/Design.js";
 import {
@@ -8,7 +9,30 @@ import {
 } from "../utils/cloudinary.js";
 import logger from "../utils/logger.js";
 
-const router = express.Router();
+const designsRouter = express.Router();
+
+// Designs payloads carry image data URLs (logos, full decals), so this route
+// needs more headroom than the 1mb global default. Apply only here.
+const jsonParser = express.json({ limit: "10mb" });
+
+const designsLimiter = rateLimit({
+  windowMs: Number(process.env.DESIGNS_RATE_LIMIT_WINDOW_MS) || 60 * 1000,
+  max: Number(process.env.DESIGNS_RATE_LIMIT_MAX) || 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    message: "Too many design saves — please slow down.",
+    code: "rate_limit_exceeded",
+  },
+});
+
+const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+const CLOUDINARY_HOST = "https://res.cloudinary.com/";
+const MAX_LOGOS = 10;
+
+const isAllowedMap = (value) =>
+  typeof value === "string" &&
+  (isDataUrl(value) || value.startsWith(CLOUDINARY_HOST));
 
 // Accept both the new (logos: []) shape and the legacy
 // (logoDecal, logoPosition) single-logo shape, and normalize to logos[].
@@ -28,7 +52,7 @@ const normalizeLogos = (body) => {
   return [];
 };
 
-router.post("/", async (req, res) => {
+designsRouter.post("/", designsLimiter, jsonParser, async (req, res) => {
   try {
     const { color, isLogoTexture, isFullTexture, fullDecal } = req.body;
     const logos = normalizeLogos(req.body);
@@ -37,6 +61,26 @@ router.post("/", async (req, res) => {
       return res
         .status(400)
         .json({ message: "Missing required fields: color, fullDecal." });
+    }
+
+    if (typeof color !== "string" || !HEX_COLOR.test(color)) {
+      return res.status(400).json({
+        message: "Invalid color: expected hex like #RRGGBB or #RGB.",
+      });
+    }
+
+    if (logos.length > MAX_LOGOS) {
+      return res
+        .status(400)
+        .json({ message: `Too many logos (max ${MAX_LOGOS}).` });
+    }
+
+    if (!isAllowedMap(fullDecal) || !logos.every((l) => isAllowedMap(l.map))) {
+      return res.status(400).json({
+        message:
+          "Decal map must be a data URL or a Cloudinary https URL.",
+        code: "invalid_decal_url",
+      });
     }
 
     const anyLogoIsDataUrl = logos.some((l) => isDataUrl(l.map));
@@ -71,14 +115,11 @@ router.post("/", async (req, res) => {
     res.status(201).json({ id: design._id });
   } catch (error) {
     logger.error({ err: error }, "designs route error");
-    res.status(500).json({
-      message: error?.message || "Failed to save design.",
-      code: error?.code,
-    });
+    res.status(500).json({ message: "Failed to save design." });
   }
 });
 
-router.get("/:id", async (req, res) => {
+designsRouter.get("/:id", async (req, res) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) {
       return res.status(400).json({ message: "Invalid design ID." });
@@ -98,10 +139,8 @@ router.get("/:id", async (req, res) => {
     });
   } catch (error) {
     logger.error({ err: error }, "designs route error");
-    res.status(500).json({
-      message: error?.message || "Failed to load design.",
-    });
+    res.status(500).json({ message: "Failed to load design." });
   }
 });
 
-export default router;
+export { designsRouter };
