@@ -37,7 +37,7 @@ export const Shirt = () => {
     easing.dampC(
       (materials.lambert1 as MeshLambertMaterial).color,
       snap.color,
-      0.25,
+      0.05,
       delta
     )
   );
