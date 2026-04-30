@@ -13,14 +13,13 @@ import {
 } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes, AIStyles } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
-import config from "../config/config";
+import { config } from "../config/config";
 import {
   CustomButton,
   AIPicker,
   ColorPicker,
   FilePicker,
   TextPicker,
-  ShareButton,
   DecalManager,
   Tab,
 } from "../components";
@@ -357,7 +356,6 @@ export const Customizer = () => {
                 customStyles="w-fit h-9 px-3 font-medium text-sm leading-none"
               />
             )}
-            <ShareButton />
             <CustomButton
               type="outline"
               title="Reset"

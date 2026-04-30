@@ -8,9 +8,6 @@ const dalleUrl =
   fallbackByMode[import.meta.env.MODE] ||
   fallbackByMode.development;
 
-const apiBase = dalleUrl.replace(/\/dalle\/?$/, "");
-
-export default {
+export const config = {
   backendUrl: dalleUrl,
-  designsUrl: `${apiBase}/designs`,
 };

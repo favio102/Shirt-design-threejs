@@ -1,5 +1,4 @@
 import { proxy, subscribe } from "valtio";
-import config from "../config/config";
 
 const STORAGE_KEY = "shirt-designer-state";
 const THEME_KEY = "shirt-designer-theme";
@@ -175,35 +174,3 @@ export const updateActiveLogo = (patch) => {
 export const rotateView = (deltaRadians: number) => {
   state.viewRotation += deltaRadians;
 };
-
-const designId = new URLSearchParams(window.location.search).get("design");
-if (designId) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10_000);
-  fetch(`${config.designsUrl}/${designId}`, { signal: controller.signal })
-    .then((r) => (r.ok ? r.json() : Promise.reject(r)))
-    .then((d) => {
-      pendingPersisted = null;
-      const migrated = migrate({ ...d });
-      // Fall back to defaults for any field the server didn't return — never
-      // assign undefined onto the proxy, that breaks downstream rendering
-      // (e.g. material color damping).
-      Object.assign(state, {
-        color: migrated.color ?? defaultState.color,
-        isLogoTexture: migrated.isLogoTexture ?? defaultState.isLogoTexture,
-        isFullTexture: migrated.isFullTexture ?? defaultState.isFullTexture,
-        logos: migrated.logos?.length ? migrated.logos : [{ ...DEFAULT_LOGO }],
-        activeLogoId:
-          migrated.activeLogoId || migrated.logos?.[0]?.id || DEFAULT_LOGO.id,
-        fullDecal: migrated.fullDecal ?? defaultState.fullDecal,
-        intro: false,
-      });
-      const url = new URL(window.location.href);
-      url.searchParams.delete("design");
-      window.history.replaceState({}, "", url.toString());
-    })
-    .catch((err) => {
-      console.warn("Failed to load shared design:", err);
-    })
-    .finally(() => clearTimeout(timeoutId));
-}
