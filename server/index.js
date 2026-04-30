@@ -1,3 +1,9 @@
+// Standalone Express version of the image-generation proxy.
+//
+// Production uses the Vercel Function at client/api/image.js instead. This
+// server is kept as a fallback for non-serverless hosts (Render, Fly.io, a
+// self-hosted VM, etc.). See server/README.md for the full story and the
+// env vars required to deploy it.
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";

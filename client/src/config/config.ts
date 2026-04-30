@@ -1,14 +1,10 @@
-const DEV_FALLBACK = "http://localhost:8080/api/v1/image";
-
-const imageUrl = import.meta.env.VITE_BACKEND_URL || DEV_FALLBACK;
-
-if (import.meta.env.PROD && !import.meta.env.VITE_BACKEND_URL) {
-  // Loud, early signal: a production build with no backend configured will
-  // hit localhost and fail. Catch it in the console instead of in the UI.
-  console.error(
-    "VITE_BACKEND_URL is not set; image generation will not work in production."
-  );
-}
+// Image generation runs as a Vercel Function at /api/image (see
+// client/api/image.js). Same-origin, so no CORS and no env var needed.
+//
+// If you ever switch to a standalone backend (e.g. the Express version in
+// server/), set VITE_BACKEND_URL to the absolute URL of that endpoint and
+// the client will use it instead.
+const imageUrl = import.meta.env.VITE_BACKEND_URL || "/api/image";
 
 export const config = {
   backendUrl: imageUrl,
