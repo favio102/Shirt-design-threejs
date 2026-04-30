@@ -23,7 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
-package-lock.json
 node_modules
 
 # Claude Code config (kept out of the repo)
