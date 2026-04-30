@@ -190,7 +190,7 @@ export const Customizer = () => {
       clearInterval(tick);
       await animateToFull();
       if (!override) setActiveEditorTab("");
-    } catch (error) {
+    } catch {
       setAiError(
         "AI service is unavailable right now. Please try again later."
       );
@@ -386,7 +386,7 @@ export const Customizer = () => {
             className="filtertabs-container"
             {...slideAnimation("up")}
           >
-            {FilterTabs.map((tab, i) => (
+            {FilterTabs.map((tab) => (
               <React.Fragment key={tab.name}>
                 <Tab
                   tab={tab}

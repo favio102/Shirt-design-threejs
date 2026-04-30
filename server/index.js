@@ -1,7 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
-import { dalleRouter } from "./routes/dalle.routes.js";
+import { imageRouter } from "./routes/image.routes.js";
 import { logger } from "./utils/logger.js";
 
 dotenv.config();
@@ -32,10 +32,10 @@ app.use(cors(corsOptions));
 // Small global limit; routes that need more raise it locally.
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/v1/dalle", dalleRouter);
+app.use("/api/v1/image", imageRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello from DALLE" });
+  res.status(200).json({ message: "Hello from the image generation API" });
 });
 
 app.get("/healthz", (req, res) => {

@@ -7,7 +7,9 @@ const loadInitialTheme = () => {
   try {
     const saved = localStorage.getItem(THEME_KEY);
     if (saved === "dark" || saved === "light") return saved;
-  } catch {}
+  } catch {
+    // localStorage may be unavailable (privacy mode); fall through to system preference.
+  }
   return typeof window !== "undefined" &&
     window.matchMedia?.("(prefers-color-scheme: dark)").matches
     ? "dark"
@@ -88,7 +90,9 @@ export const toggleTheme = () => {
   state.theme = state.theme === "dark" ? "light" : "dark";
   try {
     localStorage.setItem(THEME_KEY, state.theme);
-  } catch {}
+  } catch {
+    // Quota exceeded or storage disabled — preference still applies in-memory.
+  }
 };
 
 export const enterCustomizer = () => {

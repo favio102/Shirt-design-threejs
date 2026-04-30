@@ -2,7 +2,7 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import { logger } from "../utils/logger.js";
 
-const dalleRouter = express.Router();
+const imageRouter = express.Router();
 
 const aiLimiter = rateLimit({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60 * 1000,
@@ -15,11 +15,11 @@ const aiLimiter = rateLimit({
   },
 });
 
-dalleRouter.route("/").get((req, res) => {
+imageRouter.route("/").get((req, res) => {
   res.status(200).json({ message: "Hello from image generation router" });
 });
 
-dalleRouter.route("/").post(aiLimiter, async (req, res) => {
+imageRouter.route("/").post(aiLimiter, async (req, res) => {
   try {
     const { prompt } = req.body;
     if (!prompt || typeof prompt !== "string") {
@@ -48,4 +48,4 @@ dalleRouter.route("/").post(aiLimiter, async (req, res) => {
   }
 });
 
-export { dalleRouter };
+export { imageRouter };
