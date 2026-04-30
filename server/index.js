@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import pinoHttp from "pino-http";
 import { imageRouter } from "./routes/image.routes.js";
 import { logger } from "./utils/logger.js";
 
@@ -29,6 +30,8 @@ if (corsOrigin) {
 }
 app.use(cors(corsOptions));
 
+app.use(pinoHttp({ logger }));
+
 // Small global limit; routes that need more raise it locally.
 app.use(express.json({ limit: "1mb" }));
 
@@ -45,5 +48,34 @@ app.get("/healthz", (req, res) => {
   });
 });
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found", path: req.originalUrl });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
+  req.log?.error({ err }, "unhandled error");
+  res.status(500).json({ message: "Internal server error" });
+});
+
 const port = process.env.PORT || 8080;
-app.listen(port, () => logger.info({ port }, "server started"));
+const server = app.listen(port, () => logger.info({ port }, "server started"));
+
+const shutdown = (signal) => {
+  logger.info({ signal }, "shutting down");
+  server.close((err) => {
+    if (err) {
+      logger.error({ err }, "error during shutdown");
+      process.exit(1);
+    }
+    process.exit(0);
+  });
+  // Hard exit if connections don't close in 10s.
+  setTimeout(() => {
+    logger.warn("forced exit after shutdown timeout");
+    process.exit(1);
+  }, 10_000).unref();
+};
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
