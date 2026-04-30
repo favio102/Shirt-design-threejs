@@ -8,12 +8,12 @@ const loadInitialTheme = () => {
     const saved = localStorage.getItem(THEME_KEY);
     if (saved === "dark" || saved === "light") return saved;
   } catch {
-    // localStorage may be unavailable (privacy mode); fall through to system preference.
+    // localStorage may be unavailable (privacy mode); fall through to env default.
   }
-  return typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  // First-visit default differs between dev and prod so the local Vite session
+  // boots into dark mode while the public site stays light. Once the user
+  // toggles the theme, their choice is persisted and overrides this.
+  return import.meta.env.DEV ? "dark" : "light";
 };
 
 const DEFAULT_LOGO = {
