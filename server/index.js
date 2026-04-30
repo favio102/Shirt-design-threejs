@@ -25,8 +25,11 @@ if (corsOrigin) {
   logger.warn("CORS_ORIGIN not set in production; cross-origin requests will be denied.");
   corsOptions = { origin: false };
 } else {
-  // Local dev convenience: allow the Vite dev server out of the box.
-  corsOptions = { origin: ["http://localhost:5173", "http://127.0.0.1:5173"] };
+  // Local dev convenience: allow any localhost / 127.0.0.1 port. Vite picks
+  // 5174+ when 5173 is busy, so a fixed allowlist breaks easily.
+  corsOptions = {
+    origin: /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+  };
 }
 app.use(cors(corsOptions));
 
